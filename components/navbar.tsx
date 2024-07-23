@@ -14,6 +14,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import * as React from "react";
+import { CurrentUser } from "@/components/auth/user";
 
 const components: { title: string; href: string; description: string }[] = [
     {
@@ -65,11 +66,10 @@ ListItem.displayName = "ListItem";
 
 export default function Navbar() {
     return (
-        <NavigationMenu>
+        <NavigationMenu className="min-w-fit md:min-w-full">
             <NavigationMenuList>
                 <NavigationMenuItem>
                     <Link href={"/"}>
-                        {" "}
                         <Image
                             src={"/logo.png"}
                             alt="logo"
@@ -83,7 +83,7 @@ export default function Navbar() {
                         Getting started
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_.75fr] ">
                             <li className="row-span-3">
                                 <NavigationMenuLink asChild>
                                     <Link
@@ -148,6 +148,9 @@ export default function Navbar() {
                 <NavigationMenuItem>
                     <ModeToggle />
                 </NavigationMenuItem>
+                <div className="ml-auto">
+                    <CurrentUser />
+                </div>
             </NavigationMenuList>
         </NavigationMenu>
     );
