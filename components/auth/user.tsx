@@ -1,40 +1,17 @@
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/config";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
-export type User = {
-    email: string;
-    password: string;
-};
-
-export const login = (user: User) => {
-    signInWithEmailAndPassword(auth, user.email, user.password);
-};
-
-export const logout = () => {
-    signOut(auth);
-};
+import LoadingWithText from "@/components/loading-with-text";
+import { ActionTooltip } from "@/components/action-tooltip";
+import { logout } from "@/firebase/user";
 
 export const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
     const router = useRouter();
 
     if (loading) {
-        return (
-            <div>
-                <p>Initialising User...</p>
-            </div>
-        );
-    }
-
-    if (loading) {
-        return (
-            <div>
-                <p>Initialising User...</p>
-            </div>
-        );
+        return <LoadingWithText text="Authenticating" />;
     }
     if (error) {
         return (
@@ -47,18 +24,27 @@ export const CurrentUser = () => {
         return (
             <div>
                 <p>Current User: {user.email}</p>
-                <Button onClick={logout}>Log out</Button>
+                <Button variant="secondary" onClick={logout}>
+                    Log out
+                </Button>
             </div>
         );
     }
     return (
-        <Button
-            variant="secondary"
-            onClick={() => {
-                router.push("/login");
-            }}
+        <ActionTooltip
+            side="bottom"
+            align="center"
+            label="More funs"
+            className="mr-4"
         >
-            Log in
-        </Button>
+            <Button
+                variant="outline"
+                onClick={() => {
+                    router.push("/login");
+                }}
+            >
+                Log in
+            </Button>
+        </ActionTooltip>
     );
 };

@@ -11,10 +11,28 @@ import {
     NavigationMenuLink,
     NavigationMenuList,
     NavigationMenuTrigger,
-    navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import * as React from "react";
 import { CurrentUser } from "@/components/auth/user";
+import { ActionTooltip } from "@/components/action-tooltip";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
+import { AlignJustify } from "lucide-react";
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const components: { title: string; href: string; description: string }[] = [
     {
@@ -25,14 +43,12 @@ const components: { title: string; href: string; description: string }[] = [
     {
         title: "Projects",
         href: "",
-        description:
-            "For sighted users to preview content available behind a link.",
+        description: "The place to find out about my projects and my skills.",
     },
     {
         title: "Work Experience",
         href: "/",
-        description:
-            "The place to find out about my professional experience and my skills.",
+        description: "I'm always happy to share my work experience with you.",
     },
 ];
 
@@ -65,93 +81,178 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem";
 
 export default function Navbar() {
-    return (
-        <NavigationMenu className="min-w-fit md:min-w-full">
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <Link href={"/"}>
-                        <Image
-                            src={"/logo.png"}
-                            alt="logo"
-                            width={50}
-                            height={50}
-                        />
-                    </Link>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>
-                        Getting started
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_.75fr] ">
-                            <li className="row-span-3">
-                                <NavigationMenuLink asChild>
-                                    <Link
-                                        className="flex h-full w-full select-none flex-col justify-end bg-slate-100 rounded-md bg-gradient-to-b 
+    const isDesktop = useMediaQuery("(min-width: 768px)", true);
+    const [open, setOpen] = useState(false);
+    const router = useRouter();
+
+    if (isDesktop) {
+        return (
+            <NavigationMenu
+                className="min-w-fit md:flex hidden md:min-w-full
+            md:items-center px-2 sticky top-0 bg-slate-50 dark:bg-neutral-900"
+            >
+                <div className="flex flex-1 max-w-[1600px]">
+                    <NavigationMenuList>
+                        <NavigationMenuItem>
+                            <ActionTooltip
+                                side="bottom"
+                                align="center"
+                                label="Home"
+                            >
+                                <Link href={"/"}>
+                                    <Image
+                                        src={"/logo.png"}
+                                        alt="logo"
+                                        width={50}
+                                        height={50}
+                                    />
+                                </Link>
+                            </ActionTooltip>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>
+                                Getting started
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_.75fr] ">
+                                    <li className="row-span-3">
+                                        <NavigationMenuLink asChild>
+                                            <button
+                                                className="flex h-full w-full select-none flex-col justify-end bg-slate-100 rounded-md bg-gradient-to-b 
                                         from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                        href="/"
+                                                onClick={() => {
+                                                    router.push("/");
+                                                }}
+                                            >
+                                                <Image
+                                                    src={"/harry.svg"}
+                                                    alt="logo"
+                                                    width={200}
+                                                    height={200}
+                                                />
+                                                <div className="mb-2 mt-4 text-lg font-medium">
+                                                    My name is Harry
+                                                </div>
+                                                <p className="text-sm leading-tight text-muted-foreground">
+                                                    I'm a software engineer. I
+                                                    want to learn more about web
+                                                    development. I hope that I
+                                                    could be a great developer
+                                                    in the future.
+                                                </p>
+                                            </button>
+                                        </NavigationMenuLink>
+                                    </li>
+                                    <ListItem
+                                        onClick={() => {
+                                            router.push(
+                                                "/?section=introduction"
+                                            );
+                                        }}
+                                        title="Introduction"
                                     >
-                                        <Image
-                                            src={"/harry.svg"}
-                                            alt="logo"
-                                            width={200}
-                                            height={200}
-                                        />
-                                        <div className="mb-2 mt-4 text-lg font-medium">
-                                            My name is Harry
-                                        </div>
-                                        <p className="text-sm leading-tight text-muted-foreground">
-                                            I'm a software engineer. I want to
-                                            learn more about web development. I
-                                            hope that I could be a great
-                                            developer in the future.
-                                        </p>
-                                    </Link>
-                                </NavigationMenuLink>
-                            </li>
-                            <ListItem href="/docs" title="Introduction">
-                                Re-usable components built using Radix UI and
-                                Tailwind CSS.
-                            </ListItem>
-                            <ListItem
-                                href="/docs/installation"
-                                title="Installation"
-                            >
-                                How to install dependencies and structure your
-                                app.
-                            </ListItem>
-                            <ListItem
-                                href="/docs/primitives/typography"
-                                title="Typography"
-                            >
-                                Styles for headings, paragraphs, lists...etc
-                            </ListItem>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>About Me</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                            {components.map((component) => (
-                                <ListItem
-                                    key={component.title}
-                                    title={component.title}
-                                    href={component.href}
-                                >
-                                    {component.description}
-                                </ListItem>
-                            ))}
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <ModeToggle />
-                </NavigationMenuItem>
-                <div className="ml-auto">
-                    <CurrentUser />
+                                        How is this project created? What are
+                                        the technologies used?
+                                    </ListItem>
+                                    <ListItem
+                                        onClick={() => {
+                                            router.push("/?section=functions");
+                                        }}
+                                        title="Functions"
+                                    >
+                                        What are the functions of this website?
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>
+                                About Me
+                            </NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                    {components.map((component) => (
+                                        <ListItem
+                                            key={component.title}
+                                            title={component.title}
+                                            href={component.href}
+                                        >
+                                            {component.description}
+                                        </ListItem>
+                                    ))}
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
+                    <div className="flex flex-1 items-center justify-end space-x-4">
+                        <ModeToggle />
+                        <CurrentUser />
+                    </div>
                 </div>
-            </NavigationMenuList>
-        </NavigationMenu>
+            </NavigationMenu>
+        );
+    }
+
+    return (
+        <nav className="flex flex-1 items-center justify-between px-2 md:hidden sticky top-0 bg-slate-50 dark:bg-neutral-900">
+            <Link href={"/"}>
+                <Image src={"/logo.png"} alt="logo" width={40} height={40} />
+            </Link>
+            <Sheet open={open} onOpenChange={setOpen}>
+                <SheetTrigger>
+                    <AlignJustify />
+                </SheetTrigger>
+                <SheetContent className="w-[200px] bg-slate-50 dark:bg-neutral-900">
+                    <SheetHeader>
+                        <SheetTitle>Navigation</SheetTitle>
+                        <SheetDescription>
+                            <Link href={"/"} className="hover:underline">
+                                Home
+                            </Link>
+                            <hr />
+                            <Accordion
+                                type="single"
+                                collapsible
+                                className="w-full"
+                            >
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>
+                                        Is it accessible?
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                        Yes. It adheres to the WAI-ARIA design
+                                        pattern.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger>
+                                        Is it styled?
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                        Yes. It comes with default styles that
+                                        matches the other components&apos;
+                                        aesthetic.
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-3">
+                                    <AccordionTrigger>
+                                        Is it animated?
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                        Yes. It's animated by default, but you
+                                        can disable it if you prefer.
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                            <div className="flex flex-1 items-center justify-center space-x-4 my-2">
+                                <ModeToggle />
+                                <CurrentUser />
+                            </div>
+                            <hr />
+                        </SheetDescription>
+                    </SheetHeader>
+                </SheetContent>
+            </Sheet>
+        </nav>
     );
 }
