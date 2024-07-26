@@ -1,4 +1,6 @@
 "use client";
+import AnimatedParagraph from "@/components/effect/animated-paragraph";
+import AnimatedTitle from "@/components/effect/animated-title";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
@@ -11,32 +13,30 @@ export default function Home() {
             console.log(section);
             document
                 .getElementById(section)
-                ?.scrollIntoView({ behavior: "smooth" });
+                ?.scrollIntoView({ behavior: "smooth", inline: "nearest" });
         }
     }, [section]);
 
     return (
         <main>
             <section id="home">
-                <h1>Home</h1>
-                <div className="text-xl h-[1000px]">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum has been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printer took a galley of type and scrambled it to make a
-                    type specimen book. It has survived not only five centuries,
-                    but also the leap into electronic typesetting, remaining
-                    essentially unchanged. It was popularised in the 1960s with
-                    the release of Letraset sheets containing Lorem Ipsum
-                    passages, and more recently with desktop publishing software
-                    like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
+                <AnimatedTitle text="Hello! Nice to meet you." />
+                <AnimatedParagraph
+                    text="As an aspiring Full Stack Programmer, I thrive on turning
+                    ideas into functional, elegant web solutions. Armed with a
+                    Bachelors Degree in Electrical and Electronic Engineering,
+                    I've honed my skills in JavaScript, React, and Next.js. My
+                    passion lies in exploring the intersection of technology and
+                    creativity, and I recently completed a DAO platform as my
+                    final year project. Join me on this digital journey as we
+                    build innovative experiences together!"
+                />
             </section>
 
             <section id="introduction">
-                <h1>Introduction</h1>
-                <div className="text-xl h-96">
-                    It is a long established fact that a reader will be
+                <AnimatedTitle text="Introduction" />
+                <AnimatedParagraph
+                    text="It is a long established fact that a reader will be
                     distracted by the readable content of a page when looking at
                     its layout. The point of using Lorem Ipsum is that it has a
                     more-or-less normal distribution of letters, as opposed to
@@ -46,14 +46,14 @@ export default function Home() {
                     text, and a search for 'lorem ipsum' will uncover many web
                     sites still in their infancy. Various versions have evolved
                     over the years, sometimes by accident, sometimes on purpose
-                    (injected humour and the like).
-                </div>
+                    (injected humour and the like)."
+                />
             </section>
 
             <section id="functions">
-                <h1>Functions</h1>
-                <div className="text-xl h-96">
-                    There are many variations of passages of Lorem Ipsum
+                <AnimatedTitle text="Functions" />
+                <AnimatedParagraph
+                    text="There are many variations of passages of Lorem Ipsum
                     available, but the majority have suffered alteration in some
                     form, by injected humour, or randomised words which don't
                     look even slightly believable. If you are going to use a
@@ -66,8 +66,8 @@ export default function Home() {
                     structures, to generate Lorem Ipsum which looks reasonable.
                     The generated Lorem Ipsum is therefore always free from
                     repetition, injected humour, or non-characteristic words
-                    etc.
-                </div>
+                    etc."
+                />
             </section>
         </main>
     );

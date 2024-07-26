@@ -42,7 +42,7 @@ const components: { title: string; href: string; description: string }[] = [
     },
     {
         title: "Projects",
-        href: "",
+        href: "/",
         description: "The place to find out about my projects and my skills.",
     },
     {
@@ -194,7 +194,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className="flex flex-1 items-center justify-between px-2 md:hidden sticky top-0 bg-slate-50 dark:bg-neutral-900">
+        <nav className="flex flex-1 items-center justify-between px-2 md:hidden z-50 sticky top-0 bg-slate-50 dark:bg-neutral-900">
             <Link href={"/"}>
                 <Image src={"/logo.png"} alt="logo" width={40} height={40} />
             </Link>
@@ -206,7 +206,11 @@ export default function Navbar() {
                     <SheetHeader>
                         <SheetTitle>Navigation</SheetTitle>
                         <SheetDescription>
-                            <Link href={"/"} className="hover:underline">
+                            <Link
+                                href={"/"}
+                                className="underline"
+                                onClick={() => setOpen(false)}
+                            >
                                 Home
                             </Link>
                             <hr />
@@ -217,11 +221,24 @@ export default function Navbar() {
                             >
                                 <AccordionItem value="item-1">
                                     <AccordionTrigger>
-                                        Is it accessible?
+                                        Getting started
                                     </AccordionTrigger>
-                                    <AccordionContent>
-                                        Yes. It adheres to the WAI-ARIA design
-                                        pattern.
+                                    <AccordionContent className="w-full flex flex-1 flex-col">
+                                        <Link
+                                            href={"/?section=introduction"}
+                                            className="underline"
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            Introduction
+                                        </Link>
+                                        <br />
+                                        <Link
+                                            href={"/?section=functions"}
+                                            className="underline"
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            Functions
+                                        </Link>
                                     </AccordionContent>
                                 </AccordionItem>
                                 <AccordionItem value="item-2">
