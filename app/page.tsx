@@ -22,7 +22,7 @@ export default function Home() {
         <main>
             <section id="home">
                 <AnimatedTitle text="Hello! Nice to meet you." />
-                <div className="flex flex-col space-y-4 text-wrap md:flex-row md:space-x-4">
+                <div className="flex flex-col space-y-2 md:space-x-4 text-center">
                     <Image
                         src={"/boy-coding.jpeg"}
                         alt="boy coding"
@@ -31,23 +31,17 @@ export default function Home() {
                         className="rounded-md w-auto h-[200px] mx-auto mt-6"
                         priority={true}
                     />
-                    <AnimatedParagraph
-                        text="My name is Harry🧑‍💻, I thrive on turning
-                    ideas into functional, elegant web solutions. Armed with a
-                    Bachelors Degree in Electrical and Electronic Engineering,
-                    I've honed my skills in JavaScript, React, and Next.js. My
-                    passion lies in exploring the intersection of technology and
-                    creativity, and I recently completed a DAO platform as my
-                    final year project. Join me on this digital journey as we
-                    build innovative experiences together!"
-                        className="hover:underline text-justify"
-                    />
+                    <AnimatedDiv direction="right">
+                        <span className="font-bold transition ease-in-out delay-300 hover:underline duration-500">
+                            My name is Harry🧑‍💻
+                        </span>
+                    </AnimatedDiv>
                 </div>
             </section>
 
             <section
                 id="introduction"
-                className="mt-16 flex flex-col space-y-2 overflow-hidden text-justify"
+                className="mt-8 flex flex-col space-y-2 overflow-hidden text-justify"
             >
                 <AnimatedTitle text="Introduction" />
                 <AnimatedDiv>
