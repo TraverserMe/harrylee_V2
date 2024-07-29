@@ -38,7 +38,8 @@ const components: { title: string; href: string; description: string }[] = [
     {
         title: "Background",
         href: "/",
-        description: "It's a great place to start my introduction of myself.",
+        description:
+            "It&apos;s a great place to start my introduction of myself.",
     },
     {
         title: "Projects",
@@ -48,7 +49,8 @@ const components: { title: string; href: string; description: string }[] = [
     {
         title: "Work Experience",
         href: "/",
-        description: "I'm always happy to share my work experience with you.",
+        description:
+            "I&apos;m always happy to share my work experience with you.",
     },
 ];
 
@@ -134,11 +136,12 @@ export default function Navbar() {
                                                     My name is Harry
                                                 </div>
                                                 <p className="text-sm leading-tight text-muted-foreground">
-                                                    I'm a software engineer. I
-                                                    want to learn more about web
-                                                    development. I hope that I
-                                                    could be a great developer
-                                                    in the future.
+                                                    I&apos;m a software
+                                                    engineer. I want to learn
+                                                    more about web development.
+                                                    I hope that I could be a
+                                                    great developer in the
+                                                    future.
                                                 </p>
                                             </button>
                                         </NavigationMenuLink>
@@ -256,8 +259,8 @@ export default function Navbar() {
                                         Is it animated?
                                     </AccordionTrigger>
                                     <AccordionContent>
-                                        Yes. It's animated by default, but you
-                                        can disable it if you prefer.
+                                        Yes. It&apos;s animated by default, but
+                                        you can disable it if you prefer.
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>

@@ -59,9 +59,9 @@ export default function Home() {
                                 The Foundation of this project is Next.js, a
                                 powerful React framework that enables
                                 server-side rendering, static site generation,
-                                and seamless routing. With Next.js, I've built a
-                                fast, dynamic, and SEO-friendly website that
-                                delivers an exceptional user experience.
+                                and seamless routing. With Next.js, I&apos;ve
+                                built a fast, dynamic, and SEO-friendly website
+                                that delivers an exceptional user experience.
                             </ul>
                         </li>
                         <li className="hover:underline">
@@ -72,7 +72,7 @@ export default function Home() {
                                 provides a suite of tools that seamlessly
                                 integrate with Next.js, allowing me to focus on
                                 functionality rather than infrastructure.
-                                Whether it's user authentication, database
+                                Whether it&apos;s user authentication, database
                                 management, or cloud functions, Firebase has
                                 been my reliable companion.
                             </ul>
@@ -94,16 +94,16 @@ export default function Home() {
                         <li className="hover:underline">
                             4. Styling Magic
                             <ul>
-                                For styling, I've embraced Styled Components. It
-                                allows me to write CSS-in-JS, keeping my styles
-                                organized and reusable.
+                                For styling, I&apos;ve embraced Styled
+                                Components. It allows me to write CSS-in-JS,
+                                keeping my styles organized and reusable.
                             </ul>
                         </li>
                         <li className="hover:underline">
                             5. Framer Motion
                             <ul>
                                 Animations breathe life into my website. With
-                                Framer Motion, I've added delightful
+                                Framer Motion, I&apos;ve added delightful
                                 transitions, smooth scroll effects, and
                                 interactive elements.
                             </ul>
