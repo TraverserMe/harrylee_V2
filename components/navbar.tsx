@@ -31,26 +31,24 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const components: { title: string; href: string; description: string }[] = [
     {
         title: "Background",
-        href: "/",
-        description:
-            "It&apos;s a great place to start my introduction of myself.",
+        href: "/background",
+        description: "It's a great place to start my introduction of myself.",
     },
     {
         title: "Projects",
-        href: "/",
+        href: "/projects",
         description: "The place to find out about my projects and my skills.",
     },
     {
         title: "Work Experience",
-        href: "/",
-        description:
-            "I&apos;m always happy to share my work experience with you.",
+        href: "/workExperience",
+        description: "I'm always happy to share my work experience with you.",
     },
 ];
 
@@ -86,6 +84,11 @@ export default function Navbar() {
     const isDesktop = useMediaQuery("(min-width: 768px)", true);
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const url = useSearchParams();
+
+    useEffect(() => {
+        setOpen(false);
+    }, [url]);
 
     if (isDesktop) {
         return (
@@ -136,12 +139,11 @@ export default function Navbar() {
                                                     My name is Harry
                                                 </div>
                                                 <p className="text-sm leading-tight text-muted-foreground">
-                                                    I&apos;m a software
-                                                    engineer. I want to learn
-                                                    more about web development.
-                                                    I hope that I could be a
-                                                    great developer in the
-                                                    future.
+                                                    I{`'`}m a software engineer.
+                                                    I want to learn more about
+                                                    web development. I hope that
+                                                    I could be a great developer
+                                                    in the future.
                                                 </p>
                                             </button>
                                         </NavigationMenuLink>
@@ -209,11 +211,7 @@ export default function Navbar() {
                     <SheetHeader>
                         <SheetTitle>Navigation</SheetTitle>
                         <SheetDescription>
-                            <Link
-                                href={"/"}
-                                className="underline"
-                                onClick={() => setOpen(false)}
-                            >
+                            <Link href={"/"} className="underline">
                                 Home
                             </Link>
                             <hr />
@@ -230,7 +228,6 @@ export default function Navbar() {
                                         <Link
                                             href={"/?section=introduction"}
                                             className="underline"
-                                            onClick={() => setOpen(false)}
                                         >
                                             Introduction
                                         </Link>
@@ -238,7 +235,6 @@ export default function Navbar() {
                                         <Link
                                             href={"/?section=functions"}
                                             className="underline"
-                                            onClick={() => setOpen(false)}
                                         >
                                             Functions
                                         </Link>
@@ -250,7 +246,7 @@ export default function Navbar() {
                                     </AccordionTrigger>
                                     <AccordionContent>
                                         Yes. It comes with default styles that
-                                        matches the other components&apos;
+                                        matches the other components{`'`}
                                         aesthetic.
                                     </AccordionContent>
                                 </AccordionItem>
@@ -259,7 +255,7 @@ export default function Navbar() {
                                         Is it animated?
                                     </AccordionTrigger>
                                     <AccordionContent>
-                                        Yes. It&apos;s animated by default, but
+                                        Yes. It{`'`}s animated by default, but
                                         you can disable it if you prefer.
                                     </AccordionContent>
                                 </AccordionItem>
