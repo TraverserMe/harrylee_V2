@@ -27,9 +27,9 @@ export default function Home() {
                     <Image
                         src={"/boy-coding.jpeg"}
                         alt="boy coding"
-                        width={500}
-                        height={500}
-                        className="rounded-md w-[200px] h-[200px] md:w-[400px] mx-auto mt-6"
+                        width={400}
+                        height={400}
+                        className="rounded-md w-auto h-[200px] mx-auto mt-6"
                         priority={true}
                     />
                     <AnimatedParagraph

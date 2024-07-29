@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import LoadingWithText from "@/components/loading-with-text";
 import { ActionTooltip } from "@/components/action-tooltip";
-import { logout } from "@/firebase/user";
+import { UserButton } from "@/components/user-button";
 
 export const CurrentUser = () => {
     const [user, loading, error] = useAuthState(auth);
@@ -21,14 +21,7 @@ export const CurrentUser = () => {
         );
     }
     if (user) {
-        return (
-            <div>
-                <p>Current User: {user.email}</p>
-                <Button variant="secondary" onClick={logout}>
-                    Log out
-                </Button>
-            </div>
-        );
+        return <UserButton user={user} />;
     }
     return (
         <ActionTooltip
