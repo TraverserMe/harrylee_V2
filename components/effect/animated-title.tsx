@@ -63,7 +63,7 @@ export default function AnimatedTitle({ text }: { text: string }) {
             y: `0px`,
             transition: {
                 duration: 0.5,
-                ease: [0.2, 0.65, 0.3, 0.9],
+                ease: [0.2, 0.2, 0.3, 0.9],
             },
         },
     };
@@ -80,6 +80,7 @@ export default function AnimatedTitle({ text }: { text: string }) {
                         animate={ctrls}
                         variants={wordAnimation}
                         transition={{
+                            duration: 0.1,
                             delayChildren: index * 0.15,
                             staggerChildren: 0.05,
                         }}

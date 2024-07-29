@@ -1,13 +1,14 @@
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
 
-const fontSans = FontSans({
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+    weight: "400",
     subsets: ["latin"],
-    variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
             <body
                 className={cn(
                     "min-h-screen bg-background font-sans antialiased",
-                    fontSans.variable
+                    roboto.className
                 )}
             >
                 <ThemeProvider

@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { useAnimation, motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { cn } from "@/lib/utils";
 
-const Paragraph = styled(motion.p)`
+const Div = styled(motion.div)`
     margin-right: 0.25em;
     font-size: 1.25rem;
     @media (max-width: 768px) {
@@ -17,21 +16,19 @@ const Paragraph = styled(motion.p)`
     //     text-decoration: underline;
     // }
 `;
-interface AnimatedParagraphProps {
-    text: string;
+interface AnimatedDivProps {
+    children: React.ReactNode;
     direction?: "left" | "right" | "top" | "bottom";
-    className?: string;
 }
 
-export default function AnimatedParagraph({
-    text,
+export default function AnimatedDiv({
+    children,
     direction = "left",
-    className,
-}: AnimatedParagraphProps) {
+}: AnimatedDivProps) {
     const ctrls = useAnimation();
 
     const { ref, inView } = useInView({
-        threshold: 0.7,
+        threshold: 0.3,
     });
 
     useEffect(() => {
@@ -45,20 +42,20 @@ export default function AnimatedParagraph({
 
     //whole paragraph is move from
 
-    const paragraphAnimation = {
+    const divAnimation = {
         hidden: {
             opacity: 0,
             x:
                 direction === "left"
                     ? "-5rem"
                     : direction === "right"
-                    ? "5rem"
+                    ? "10rem"
                     : "0",
             y:
                 direction === "top"
                     ? "-5rem"
                     : direction === "bottom"
-                    ? "5rem"
+                    ? "10rem"
                     : "0",
         },
         visible: {
@@ -72,15 +69,14 @@ export default function AnimatedParagraph({
     };
 
     return (
-        <Paragraph
+        <Div
             ref={ref}
             animate={ctrls}
             aria-hidden="true"
             initial="hidden"
-            variants={paragraphAnimation}
-            className={cn("inline", className)}
+            variants={divAnimation}
         >
-            {text}
-        </Paragraph>
+            {children}
+        </Div>
     );
 }

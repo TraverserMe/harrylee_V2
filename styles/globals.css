@@ -62,7 +62,7 @@
 @layer base {
   * {
     @apply border-border;
-    scroll-padding-top: 4rem;
+    /* scroll-padding-top: 10rem; */
   }
   
   body {
