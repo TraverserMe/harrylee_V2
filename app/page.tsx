@@ -9,7 +9,6 @@ import { useEffect } from "react";
 export default function Home() {
     const searchParams = useSearchParams();
     const section = searchParams.get("section");
-
     useEffect(() => {
         if (section) {
             document

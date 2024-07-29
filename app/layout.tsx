@@ -25,13 +25,13 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <head />
-            <Suspense fallback={<div>Loading...</div>}>
-                <body
-                    className={cn(
-                        "min-h-screen bg-background font-sans antialiased",
-                        roboto.className
-                    )}
-                >
+            <body
+                className={cn(
+                    "min-h-screen bg-background font-sans antialiased",
+                    roboto.className
+                )}
+            >
+                <Suspense fallback={<div>Loading...</div>}>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
@@ -41,8 +41,8 @@ export default function RootLayout({
                         <Navbar />
                         {children}
                     </ThemeProvider>
-                </body>
-            </Suspense>
+                </Suspense>
+            </body>
         </html>
     );
 }
