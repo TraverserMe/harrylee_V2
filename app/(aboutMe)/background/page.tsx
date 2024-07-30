@@ -1,7 +1,19 @@
 "use client";
 import TitleBar from "@/components/design/titleBar";
+import { retrieveUser, firstTimeClaim } from "@/firebase/admin/admin";
 
 function BackgroundPage() {
+    const test = async () => {
+        const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
+        if (!user) return console.log("user not found");
+        console.log(JSON.parse(user));
+    };
+
+    const test2 = async () => {
+        const user = await firstTimeClaim("nouJSYa4k8PpmlBLG263pJaCsrD3");
+        console.log(user);
+    };
+
     return (
         <div>
             <section id="aboutMe">
@@ -86,6 +98,13 @@ function BackgroundPage() {
                     </div>
                 </div>
             </section>
+
+            <button className="bg-red-500" onClick={test}>
+                Test
+            </button>
+            <button className="bg-blue-500" onClick={test2}>
+                Test2
+            </button>
         </div>
     );
 }
