@@ -7,6 +7,7 @@ import { UserRole } from "@/schemas/user-schema";
 const retrieveUser = async (uid: string) => {
     try {
         const res = await adminAuth.getUser(uid);
+        console.log(res);
         if (!res) {
             return false;
         }

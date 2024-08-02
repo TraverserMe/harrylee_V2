@@ -11,7 +11,7 @@ export const CurrentUser = () => {
     const router = useRouter();
 
     if (loading) {
-        return <LoadingWithText text="Authenticating" />;
+        return <LoadingWithText text="" />;
     }
     if (error) {
         return (

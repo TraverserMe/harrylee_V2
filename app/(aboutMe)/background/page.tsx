@@ -1,6 +1,8 @@
 "use client";
 import TitleBar from "@/components/design/titleBar";
 import { retrieveUser, firstTimeClaim } from "@/firebase/admin/admin";
+import queryString from "query-string";
+import axios from "axios";
 
 function BackgroundPage() {
     const test = async () => {
@@ -12,6 +14,29 @@ function BackgroundPage() {
     const test2 = async () => {
         const user = await firstTimeClaim("nouJSYa4k8PpmlBLG263pJaCsrD3");
         console.log(user);
+    };
+
+    const test3 = async () => {
+        try {
+            const url = queryString.stringifyUrl({
+                url: "/api/firebase/admin/setCustomUserClaims",
+            });
+            console.log(url);
+
+            const res = await axios.patch(url, {
+                uid: "nouJSYa4k8PpmlBLG263pJaCsrD3",
+                claims: {
+                    isOwner: true,
+                    isAdmin: false,
+                    isUser: true,
+                },
+            });
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+        // const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
+        // console.log(user);
     };
 
     return (
@@ -104,6 +129,9 @@ function BackgroundPage() {
             </button>
             <button className="bg-blue-500" onClick={test2}>
                 Test2
+            </button>
+            <button className="bg-green-500" onClick={test3}>
+                Test3
             </button>
         </div>
     );
