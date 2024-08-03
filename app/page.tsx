@@ -13,7 +13,7 @@ export default function Home() {
         if (section) {
             document
                 .getElementById(section)
-                ?.scrollIntoView({ behavior: "smooth", block: "center" });
+                ?.scrollIntoView({ behavior: "smooth", block: "start" });
             console.log(section);
         }
     }, [section]);
