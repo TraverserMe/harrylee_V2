@@ -68,7 +68,7 @@ function WorkExperiencePage() {
                     </ul>
                 </div>
                 <div className="text-sm md:text-lg text-right">
-                    <p className="min-w-[150px] ">Sept 2020 - Now</p>
+                    <p className="min-w-[150px] ">Dec 2021 - Apr 2024</p>
                 </div>
             </section>
 
