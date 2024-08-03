@@ -59,7 +59,8 @@ const ListItem = React.forwardRef<
     return (
         <li>
             <NavigationMenuLink asChild>
-                <a
+                <Link
+                    href={props.href ? props.href : "/"}
                     ref={ref}
                     className={cn(
                         "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
@@ -73,7 +74,7 @@ const ListItem = React.forwardRef<
                     <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                         {children}
                     </p>
-                </a>
+                </Link>
             </NavigationMenuLink>
         </li>
     );
@@ -83,7 +84,6 @@ ListItem.displayName = "ListItem";
 export default function Navbar() {
     const isDesktop = useMediaQuery("(min-width: 768px)", true);
     const [open, setOpen] = useState(false);
-    const router = useRouter();
     const url = useSearchParams();
 
     useEffect(() => {
@@ -122,12 +122,10 @@ export default function Navbar() {
                                 <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_.75fr] ">
                                     <li className="row-span-3">
                                         <NavigationMenuLink asChild>
-                                            <button
+                                            <Link
+                                                href={"/"}
                                                 className="flex h-full w-full select-none flex-col justify-end bg-slate-100 rounded-md bg-gradient-to-b 
                                         from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                                onClick={() => {
-                                                    router.push("/");
-                                                }}
                                             >
                                                 <Image
                                                     src={"/harry.svg"}
@@ -145,25 +143,19 @@ export default function Navbar() {
                                                     I could be a great developer
                                                     in the future.
                                                 </p>
-                                            </button>
+                                            </Link>
                                         </NavigationMenuLink>
                                     </li>
                                     <ListItem
-                                        onClick={() => {
-                                            router.push(
-                                                "/?section=introduction"
-                                            );
-                                        }}
                                         title="Introduction"
+                                        href="/?section=introduction"
                                     >
                                         How is this project created? What are
                                         the technologies used?
                                     </ListItem>
                                     <ListItem
-                                        onClick={() => {
-                                            router.push("/?section=functions");
-                                        }}
                                         title="Functions"
+                                        href={"/?section=functions"}
                                     >
                                         What are the functions of this website?
                                     </ListItem>
@@ -242,21 +234,29 @@ export default function Navbar() {
                                 </AccordionItem>
                                 <AccordionItem value="item-2">
                                     <AccordionTrigger>
-                                        Is it styled?
+                                        About Me
                                     </AccordionTrigger>
-                                    <AccordionContent>
-                                        Yes. It comes with default styles that
-                                        matches the other components{`'`}
-                                        aesthetic.
-                                    </AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-3">
-                                    <AccordionTrigger>
-                                        Is it animated?
-                                    </AccordionTrigger>
-                                    <AccordionContent>
-                                        Yes. It{`'`}s animated by default, but
-                                        you can disable it if you prefer.
+                                    <AccordionContent className="w-full flex flex-1 flex-col">
+                                        <Link
+                                            href={"/background"}
+                                            className="underline"
+                                        >
+                                            Background
+                                        </Link>
+                                        <br />
+                                        <Link
+                                            href={"/workExperience"}
+                                            className="underline"
+                                        >
+                                            Work Experience
+                                        </Link>
+                                        <br />
+                                        <Link
+                                            href={"/projects"}
+                                            className="underline"
+                                        >
+                                            Projects
+                                        </Link>
                                     </AccordionContent>
                                 </AccordionItem>
                             </Accordion>

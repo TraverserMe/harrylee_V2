@@ -3,41 +3,44 @@ import TitleBar from "@/components/design/titleBar";
 import { retrieveUser, firstTimeClaim } from "@/firebase/admin/admin";
 import queryString from "query-string";
 import axios from "axios";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function BackgroundPage() {
-    const test = async () => {
-        const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
-        if (!user) return console.log("user not found");
-        console.log(JSON.parse(user));
-    };
+    // const test = async () => {
+    //     const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
+    //     if (!user) return console.log("user not found");
+    //     console.log(JSON.parse(user));
+    // };
 
-    const test2 = async () => {
-        const user = await firstTimeClaim("nouJSYa4k8PpmlBLG263pJaCsrD3");
-        console.log(user);
-    };
+    // const test2 = async () => {
+    //     const user = await firstTimeClaim("nouJSYa4k8PpmlBLG263pJaCsrD3");
+    //     console.log(user);
+    // };
 
-    const test3 = async () => {
-        try {
-            const url = queryString.stringifyUrl({
-                url: "/api/firebase/admin/setCustomUserClaims",
-            });
-            console.log(url);
+    // const test3 = async () => {
+    //     try {
+    //         const url = queryString.stringifyUrl({
+    //             url: "/api/firebase/admin/setCustomUserClaims",
+    //         });
+    //         console.log(url);
 
-            const res = await axios.patch(url, {
-                uid: "nouJSYa4k8PpmlBLG263pJaCsrD3",
-                claims: {
-                    isOwner: true,
-                    isAdmin: false,
-                    isUser: true,
-                },
-            });
-            console.log(res);
-        } catch (error) {
-            console.log(error);
-        }
-        // const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
-        // console.log(user);
-    };
+    //         const res = await axios.patch(url, {
+    //             uid: "nouJSYa4k8PpmlBLG263pJaCsrD3",
+    //             claims: {
+    //                 isOwner: true,
+    //                 isAdmin: false,
+    //                 isUser: true,
+    //             },
+    //         });
+    //         console.log(res);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    //     // const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
+    //     // console.log(user);
+    // };
 
     return (
         <div>
@@ -96,11 +99,11 @@ function BackgroundPage() {
             </section>
 
             <section id="skillsAndLanguages" className="mt-4">
-                <div className="flex flex-col sm:flex-row flex-1">
+                <div className="flex flex-col md:flex-row flex-1 md:space-x-10">
                     <div className="w-full">
                         <TitleBar title="Technical Skills" />
                         <div className="flex flex-1">
-                            <ol className="list-disc list-inside p-2 w-full space-y-2">
+                            <ol className="list-disc list-inside p-2 w-full space-y-2 font-semibold">
                                 <li>Next Js</li>
                                 <li>React</li>
                                 <li>Tailwind</li>
@@ -108,7 +111,7 @@ function BackgroundPage() {
                                 <li>Java</li>
                                 <li>C++</li>
                             </ol>
-                            <ol className="list-disc list-inside p-2 w-full space-y-2">
+                            <ol className="list-disc list-inside p-2 w-full space-y-2 font-semibold">
                                 <li>Node</li>
                                 <li>Svelte Kit</li>
                                 <li>SQL</li>
@@ -120,19 +123,87 @@ function BackgroundPage() {
                     </div>
                     <div className="w-full">
                         <TitleBar title="Languages" />
+                        <ol className="list-disc list-inside p-2 w-full space-y-2 font-semibold">
+                            <li>Fluent in English</li>
+                            <li>Fluent in Cantonese</li>
+                            <li>Fluent in Mandarin</li>
+                        </ol>
                     </div>
                 </div>
             </section>
 
-            <button className="bg-red-500" onClick={test}>
-                Test
-            </button>
-            <button className="bg-blue-500" onClick={test2}>
-                Test2
-            </button>
-            <button className="bg-green-500" onClick={test3}>
-                Test3
-            </button>
+            <section id="contact" className="mt-4">
+                <div className="flex flex-col md:flex-row flex-1 md:space-x-10">
+                    <div className="w-full">
+                        <TitleBar title="Contact" />
+                        <ol className="list-inside p-2 w-full space-y-4 font-semibold">
+                            <li>
+                                <Link href={"tel:+852 55472822"}>
+                                    📞
+                                    <span className="hover:underline">
+                                        +852 55472822
+                                    </span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="mailto:leekinnangharry@gmail.com">
+                                    ✉️{" "}
+                                    <span className="hover:underline">
+                                        leekinnangharry@gmail.com
+                                    </span>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={"https://github.com/TraverserMe"}
+                                    className="flex items-center hover:underline"
+                                    target="_blank"
+                                >
+                                    <Image
+                                        src={"/github-mark.png"}
+                                        width={30}
+                                        height={30}
+                                        alt="github logo"
+                                        className="mr-2"
+                                    />
+                                    TraverserMe
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="https://www.linkedin.com/in/kin-nang-lee-1826a8250/"
+                                    target="_blank"
+                                    className="flex items-center hover:underline"
+                                >
+                                    <Image
+                                        src={"/linkedin.svg"}
+                                        width={30}
+                                        height={30}
+                                        alt="github logo"
+                                        className="mr-2"
+                                    />
+                                    Kin Nang (Harry) Lee
+                                </Link>
+                            </li>
+                        </ol>
+                    </div>
+                    <div className="w-full"></div>
+                </div>
+            </section>
+
+            <div className="w-full mt-4">
+                <TitleBar
+                    title="Download Resume (CV)"
+                    className="text-center w-fit mx-auto text-sm md:text-xl pl-0 p-2"
+                />
+                <p className="text-center text-sm p-2">
+                    <a href="/resume.pdf" download className="w-fit mx-auto">
+                        <Button variant={"outline"}>Click Here 👆</Button>
+                    </a>
+                    <br />
+                    Click the button below to download my resume.
+                </p>
+            </div>
         </div>
     );
 }

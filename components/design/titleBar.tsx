@@ -1,10 +1,14 @@
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 
-function TitleBar({ title }: { title: string }) {
+function TitleBar({ title, className }: { title: string; className?: string }) {
     return (
         <motion.div
             whileHover={{ scale: 1.05 }}
-            className="text-xl md:text-2xl font-extrabold uppercase pl-6 text-white bg-neutral-900 dark:bg-slate-50 dark:text-neutral-900 p-2"
+            className={cn(
+                "text-xl md:text-2xl font-extrabold uppercase p-2 pl-4 text-white bg-neutral-900 dark:bg-slate-50 dark:text-neutral-900",
+                className
+            )}
         >
             {title}
         </motion.div>

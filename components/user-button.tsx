@@ -10,9 +10,12 @@ import {
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "firebase/auth";
 import LogoutButton from "@/components/auth/logout-button";
+import { Button } from "@/components/ui/button";
+import { UserRole } from "@/schemas/user-schema";
 
 interface LogoutButtonProps {
     user: User;
+    userClaims?: UserRole;
 }
 
 export const UserButton = (props: LogoutButtonProps) => {
@@ -29,6 +32,7 @@ export const UserButton = (props: LogoutButtonProps) => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent className="w-40" align="center">
+                {/* {props.userClaims?.isOwner && <div>hi</div>} */}
                 <DropdownMenuItem>
                     <LogoutButton />
                 </DropdownMenuItem>
