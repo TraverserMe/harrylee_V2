@@ -6,7 +6,6 @@
 .pnp.js
 .yarn/install-state.gz
 /functions/node_modules
-/firebase/sdk
 
 # testing
 /coverage
