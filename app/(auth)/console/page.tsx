@@ -1,10 +1,12 @@
 "use client";
 import { auth } from "@/firebase/config";
-import { getUserInfo } from "@/firebase/user";
-import { UserRole } from "@/schemas/user-schema";
+import { getUserInfo, getUsers } from "@/firebase/user";
+import { UserRole, UserSchema } from "@/schemas/user-schema";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+import { DataTable } from "@/components/data-table";
+import { columns } from "@/components/columns";
 
 function ConsolePage() {
     const router = useRouter();
@@ -18,10 +20,13 @@ function ConsolePage() {
                     isUser: userInfo?.claims.isUser as boolean,
                 });
             } else {
+                console.log(1);
                 return router.push("/");
             }
         },
     });
+
+    const [users, setUsers] = useState<UserSchema[]>([]);
 
     useEffect(() => {
         if (!user) return;
@@ -31,9 +36,15 @@ function ConsolePage() {
                 isOwner: userInfo?.claims.isOwner as boolean,
                 isUser: userInfo?.claims.isUser as boolean,
             });
-            if (!userInfo?.claims.isOwner && !userInfo?.claims.isAdmin) {
+            const permitted =
+                userInfo?.claims.isOwner || userInfo?.claims.isAdmin;
+            if (!permitted) {
                 router.push("/");
             }
+        });
+
+        getUsers().then((users) => {
+            setUsers(users);
         });
     }, [user]);
 
@@ -47,11 +58,15 @@ function ConsolePage() {
         return <main>Loading...</main>;
     }
 
+    const permitted = userClaims.isOwner || userClaims.isAdmin;
+
     if (!userClaims.isOwner && !userClaims.isAdmin) {
         return <main>Permission Denied</main>;
     }
 
-    return <main>ConsolePage</main>;
+    return (
+        <main>{permitted && <DataTable columns={columns} data={users} />}</main>
+    );
 }
 
 export default ConsolePage;

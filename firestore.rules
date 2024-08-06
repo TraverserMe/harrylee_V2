@@ -5,8 +5,9 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
-    match /user/{document=**} {
+    match /users/{document=**} {
       allow get: if true;
+      allow read: if true;
       allow write: if isAdmin();
     }
   }
