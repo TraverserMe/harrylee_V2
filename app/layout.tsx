@@ -31,7 +31,7 @@ export default function RootLayout({
                     roboto.className
                 )}
             >
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<main>Loading...</main>}>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"

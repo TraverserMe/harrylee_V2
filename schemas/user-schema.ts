@@ -11,3 +11,7 @@ export interface UserRole {
     isUser: boolean;
 }
 
+export interface UserSchema extends UserRole {
+    id: string;
+    email: string;
+}

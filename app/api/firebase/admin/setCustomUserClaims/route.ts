@@ -2,22 +2,13 @@ import { UserRole } from "@/schemas/user-schema";
 import { NextResponse } from "next/server";
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { app, auth } from "@/firebase/config";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { getUserInfo } from "@/firebase/user";
 
 export async function PATCH(req: Request) {
 
     const { uid, claims }: { uid: string; claims: UserRole } = await req.json();
-    const [user, loading, error] = useAuthState(auth);
-    if (!user) return new NextResponse("Unauthorized", { status: 401 });
 
-    console.log("test");
-    const userInfo = await getUserInfo(user.uid);
-    console.log("userInfo", userInfo);
-    if (!userInfo) return new NextResponse("Unauthorized", { status: 401 });
-    if (!userInfo)
-
-        console.log('uid', uid);
+    console.log('uid', uid);
     console.log('claims', claims);
     if (!uid) return new NextResponse("uid is required", { status: 400 });
     if (!claims) return new NextResponse("claims is required", { status: 400 });

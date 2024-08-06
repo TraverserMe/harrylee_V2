@@ -15,8 +15,9 @@ function LoginProvider() {
     const signInWithGoogle = async () => {
         setIsLoading(true);
         try {
-            const res = await signInWithPopup(auth, provider);
+            await signInWithPopup(auth, provider);
             // console.log(res);
+
             router.push("/");
         } catch (error) {
             if (

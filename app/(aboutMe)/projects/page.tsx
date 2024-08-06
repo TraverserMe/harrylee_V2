@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function ProjectsPage() {
     return (
-        <div>
+        <>
             <TitleBar title="Projects Page" />
             <section id="#project_1" className="mt-4 p-2 ">
                 <div className="flex flex-1 font-bold flex-col md:flex-row">
@@ -181,7 +181,7 @@ function ProjectsPage() {
                     </Link>
                 </div>
             </section>
-        </div>
+        </>
     );
 }
 
