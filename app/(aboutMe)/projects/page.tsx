@@ -10,7 +10,9 @@ function ProjectsPage() {
             <section id="#project_1" className="mt-4 p-2 ">
                 <div className="flex flex-1 font-bold flex-col md:flex-row">
                     <div className="w-full text-wrap ">
-                        <h1 className="text-lg md:text-xl">Galaxy of Movies</h1>
+                        <h1 className="text-lg md:text-xl underline">
+                            Galaxy of Movies
+                        </h1>
                         <h2 className="text-sm md:text-lg">My first project</h2>
                         <p className="mt-2 px-4">
                             <strong>Technologies:</strong> HTML, CSS,
@@ -61,10 +63,13 @@ function ProjectsPage() {
                 </div>
             </section>
 
+            <hr />
             <section id="#project_2" className="mt-4 p-2 ">
                 <div className="flex flex-1 font-bold flex-col md:flex-row">
                     <div className="w-full text-wrap ">
-                        <h1 className="text-lg md:text-xl">DAO platform</h1>
+                        <h1 className="text-lg md:text-xl underline">
+                            DAO platform
+                        </h1>
                         <h2 className="text-sm md:text-lg">My FYP project</h2>
                         <p className="mt-2 px-4">
                             <strong>Technologies:</strong> HTML, CSS,
@@ -81,8 +86,18 @@ function ProjectsPage() {
                             need to use MetaMask to interact with the smart
                             contract.
                         </p>
+                        <br />
+                        <h2 className="text-sm md:text-lg">
+                            Introduction Video:
+                        </h2>
+                        <video width="400" height="300" controls preload="none">
+                            <source
+                                src="/fyp-demo-video.mp4"
+                                type="video/mp4"
+                            />
+                        </video>
                     </div>
-                    <div>
+                    <div className="mt-2">
                         <Image
                             src={"/fyp-poster.png"}
                             alt={"DAO platform"}
@@ -93,11 +108,6 @@ function ProjectsPage() {
                     </div>
                 </div>
                 <div>
-                    <video width="320" height="240" controls preload="none">
-                        <source src="/fyp-demo-video.mp4" type="video/mp4" />
-                        {/* Your browser does not support the video tag. */}
-                    </video>
-                    <br />
                     <Link
                         href="https://fyp-ochre.vercel.app/"
                         className="text-base break-all"
@@ -107,7 +117,9 @@ function ProjectsPage() {
                         <span className="hover:underline text-blue-500 ">
                             https://fyp-ochre.vercel.app/
                         </span>
+                        <br />
                     </Link>
+                    (It needs MetaMask to be viewed)
                     <br />
                     <Link
                         href={"https://github.com/TraverserMe/FYP"}
@@ -117,6 +129,54 @@ function ProjectsPage() {
                         Github:{" "}
                         <span className="hover:underline text-blue-500 ">
                             https://github.com/TraverserMe/FYP
+                        </span>
+                    </Link>
+                </div>
+            </section>
+            <hr />
+            <section id="#project_3" className="mt-4 p-2 ">
+                <div className="flex flex-1 font-bold flex-col md:flex-row">
+                    <div className="w-full text-wrap ">
+                        <h1 className="text-lg md:text-xl underline">
+                            harrylee.com
+                        </h1>
+                        <h2 className="text-sm md:text-lg">
+                            First version of this website
+                        </h2>
+                        <p className="mt-2 px-4">
+                            <strong>Technologies:</strong> HTML, CSS,
+                            JavaScript, NextJs, Tailwindcss, NextAuth, Prisma,
+                            Firebase realtime database
+                        </p>
+                        <br />
+                        <p className="px-4">
+                            <strong>About:</strong> This is my first version of
+                            my personal website. The website is built with
+                            NextJs and Tailwindcss. The website is like my
+                            playground. The website is built with NextAuth for
+                            authentication and Prisma for database management.
+                            It has bus stop information.
+                        </p>
+                    </div>
+                    <div className="mt-2">
+                        <Image
+                            src={"/version-one-thumbnail.png"}
+                            alt={"DAO platform"}
+                            width={500}
+                            height={300}
+                            className="rounded-xl"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <Link
+                        href="https://harrylee-com.vercel.app/"
+                        className="text-base break-all"
+                        target="_blank"
+                    >
+                        Link:{" "}
+                        <span className="hover:underline text-blue-500 ">
+                            https://harrylee-com.vercel.app/
                         </span>
                     </Link>
                 </div>
