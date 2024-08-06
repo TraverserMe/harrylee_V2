@@ -15,11 +15,6 @@ function BackgroundPage() {
     //     console.log(JSON.parse(user));
     // };
 
-    // const test2 = async () => {
-    //     const user = await firstTimeClaim("nouJSYa4k8PpmlBLG263pJaCsrD3");
-    //     console.log(user);
-    // };
-
     // const test3 = async () => {
     //     try {
     //         const url = queryString.stringifyUrl({
@@ -31,7 +26,7 @@ function BackgroundPage() {
     //             uid: "nouJSYa4k8PpmlBLG263pJaCsrD3",
     //             claims: {
     //                 isOwner: true,
-    //                 isAdmin: false,
+    //                 isAdmin: true,
     //                 isUser: true,
     //             },
     //         });
@@ -44,7 +39,7 @@ function BackgroundPage() {
     // };
 
     return (
-        <div>
+        <>
             <section id="aboutMe">
                 <TitleBar title="About Me" />
                 <p className="text-bold mt-2 p-2 text-sm md:text-xl">
@@ -207,7 +202,7 @@ function BackgroundPage() {
                     Click the button below to download my resume.
                 </p>
             </div>
-        </div>
+        </>
     );
 }
 

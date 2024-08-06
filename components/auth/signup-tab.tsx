@@ -11,7 +11,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { FcGoogle } from "react-icons/fc";
 import { Input } from "@/components/ui/input";
 import { TabsContent } from "@/components/ui/tabs";
 
@@ -59,15 +58,16 @@ function SignInTab() {
         setError("");
         setSuccess("");
         try {
-            const res = await createUser({
+            await createUser({
                 email: values.email,
                 password: values.password,
             });
+
+            setSuccess("Account created successfully");
             form.reset();
-            setSuccess("Account created successfully, enjoy your journey");
             setTimeout(() => {
                 setSuccess("");
-                router.push("/");
+                router.push("/login");
             }, 1000);
         } catch (error) {
             if (

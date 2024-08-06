@@ -3,8 +3,9 @@ import {
     signInWithEmailAndPassword,
     signOut,
     createUserWithEmailAndPassword,
+    sendEmailVerification,
 } from "firebase/auth";
-import { app, auth } from "@/firebase/config";
+import { auth } from "@/firebase/config";
 
 export const login = (user: User) => {
     return signInWithEmailAndPassword(auth, user.email, user.password);
@@ -15,11 +16,17 @@ export const logout = () => {
 };
 
 export const createUser = async (user: User) => {
-    return await createUserWithEmailAndPassword(
+
+    // Create user 
+    const userCredential = await createUserWithEmailAndPassword(
         auth,
         user.email,
         user.password
     );
+
+    await sendEmailVerification(userCredential.user);
+    logout()
+    return userCredential;
 };
 
 export const getUserInfo = async (uid: string) => {

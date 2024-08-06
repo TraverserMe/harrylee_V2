@@ -5,5 +5,12 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+    match /user/{document=**} {
+      allow get: if true;
+      allow write: if isAdmin();
+    }
+  }
+  function isAdmin() {
+    return request.auth!=null && request.auth.token.isAdmin == true;
   }
 }

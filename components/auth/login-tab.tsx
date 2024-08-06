@@ -30,6 +30,8 @@ import {
     FormField,
     FormMessage,
 } from "@/components/ui/form";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/config";
 
 function LoginTab() {
     const [error, setError] = useState<string | undefined>("");
@@ -52,12 +54,16 @@ function LoginTab() {
         setError("");
         setSuccess("");
         try {
-            const res = await login({
+            const UserCredential = await login({
                 email: values.email,
                 password: values.password,
             });
 
-            console.log(res);
+            if (!UserCredential.user.emailVerified) {
+                setError("Please verify your email first");
+                signOut(auth);
+                return;
+            }
             setSuccess("Login successful");
             form.reset();
             setTimeout(() => {

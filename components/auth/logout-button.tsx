@@ -1,16 +1,20 @@
 import { logout } from "@/firebase/user";
 import { LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function LogoutButton() {
     return (
-        <span
-            onClick={logout}
-            className="flex items-center w-full"
-            role="button"
+        <Button
+            onClick={() => {
+                logout();
+                window.location.reload();
+            }}
+            className="flex items-center w-full "
+            variant={"outline"}
         >
             <LogOut className="mr-4" />
-            Log out
-        </span>
+            <span className="w-full">Log out</span>
+        </Button>
     );
 }
 
