@@ -46,7 +46,7 @@ function ConsolePage() {
         getUsers().then((users) => {
             setUsers(users);
         });
-    }, [user]);
+    }, [user, router]);
 
     const [userClaims, setUserClaims] = useState<UserRole>({
         isAdmin: false,
