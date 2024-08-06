@@ -6,6 +6,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Phone, Mail } from "lucide-react";
 
 function BackgroundPage() {
     // const test = async () => {
@@ -138,19 +139,21 @@ function BackgroundPage() {
                         <TitleBar title="Contact" />
                         <ol className="list-inside p-2 w-full space-y-4 font-semibold">
                             <li>
-                                <Link href={"tel:+852 55472822"}>
-                                    📞
-                                    <span className="hover:underline">
-                                        +852 55472822
-                                    </span>
+                                <Link
+                                    href={"tel:+852 55472822"}
+                                    className="flex items-center hover:underline"
+                                >
+                                    <Phone className="mr-2" />
+                                    +852 55472822
                                 </Link>
                             </li>
                             <li>
-                                <Link href="mailto:leekinnangharry@gmail.com">
-                                    ✉️{" "}
-                                    <span className="hover:underline">
-                                        leekinnangharry@gmail.com
-                                    </span>
+                                <Link
+                                    href="mailto:leekinnangharry@gmail.com"
+                                    className="flex items-center hover:underline break-all"
+                                >
+                                    <Mail className="mr-3" />
+                                    leekinnangharry@gmail.com
                                 </Link>
                             </li>
                             <li>

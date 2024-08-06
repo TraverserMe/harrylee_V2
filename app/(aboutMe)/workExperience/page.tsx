@@ -38,7 +38,7 @@ function WorkExperiencePage() {
                     <p className="min-w-[150px] ">Sept 2020 - Now</p>
                 </div>
             </section>
-
+            <hr />
             <section id="#work_2" className="mt-4 p-2 flex flex-1 font-bold">
                 <div className="w-full">
                     <h1 className="text-sm md:text-xl">
@@ -71,7 +71,7 @@ function WorkExperiencePage() {
                     <p className="min-w-[150px] ">Dec 2021 - Apr 2024</p>
                 </div>
             </section>
-
+            <hr />
             <section id="#work_3" className="mt-4 p-2 flex flex-1 font-bold">
                 <div className="w-full">
                     <h1 className="text-sm md:text-xl">
