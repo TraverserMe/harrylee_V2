@@ -13,7 +13,7 @@ export const CurrentUser = () => {
     const [user, loading, error] = useIdToken(auth, {
         onUserChanged: async (user) => {
             if (user) {
-                const userInfo = await getCurrentUserInfo(user.uid);
+                const userInfo = await getCurrentUserInfo();
                 setUserClaims({
                     isAdmin: userInfo?.claims.isAdmin as boolean,
                     isOwner: userInfo?.claims.isOwner as boolean,
