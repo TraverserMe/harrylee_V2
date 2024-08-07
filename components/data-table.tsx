@@ -36,17 +36,22 @@ import { useState } from "react";
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    selectedRow: TData | null;
+    setSelectedRow: (row: TData | null) => void;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    selectedRow,
+    setSelectedRow,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
         {}
     );
+    const [rowSelection, setRowSelection] = useState({});
     const table = useReactTable({
         data,
         columns,
@@ -57,12 +62,18 @@ export function DataTable<TData, TValue>({
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
+            rowSelection,
         },
     });
+
+    const handleRowClick = (row: TData) => {
+        setSelectedRow(row);
+    };
 
     return (
         <div>
@@ -137,9 +148,13 @@ export function DataTable<TData, TValue>({
                                     data-state={
                                         row.getIsSelected() && "selected"
                                     }
+                                    onClick={() => handleRowClick(row.original)}
                                 >
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell
+                                            key={cell.id}
+                                            className="text-center"
+                                        >
                                             {flexRender(
                                                 cell.column.columnDef.cell,
                                                 cell.getContext()

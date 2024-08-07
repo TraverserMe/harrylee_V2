@@ -4,6 +4,7 @@ import { UserSchema } from "@/schemas/user-schema";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,6 +24,30 @@ import {
 // };
 
 export const columns: ColumnDef<UserSchema>[] = [
+    // {
+    //     id: "select",
+    //     // header: ({ table }) => (
+    //     //     <Checkbox
+    //     //         checked={
+    //     //             table.getIsAllPageRowsSelected() ||
+    //     //             (table.getIsSomePageRowsSelected() && "indeterminate")
+    //     //         }
+    //     //         onCheckedChange={(value) =>
+    //     //             table.toggleAllPageRowsSelected(!!value)
+    //     //         }
+    //     //         aria-label="Select all"
+    //     //     />
+    //     // ),
+    //     cell: ({ row }) => (
+    //         <Checkbox
+    //             checked={row.getIsSelected()}
+    //             onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //             aria-label="Select row"
+    //         />
+    //     ),
+    //     enableSorting: false,
+    //     enableHiding: false,
+    // },
     {
         id: "actions",
         cell: ({ row }) => {
@@ -68,6 +93,7 @@ export const columns: ColumnDef<UserSchema>[] = [
                     onClick={() =>
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
+                    className="w-full"
                 >
                     Email
                     <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -77,10 +103,50 @@ export const columns: ColumnDef<UserSchema>[] = [
     },
     {
         accessorKey: "isAdmin",
-        header: "Admin",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                    className="w-full"
+                >
+                    Admin
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            return row.getValue("isAdmin") ? (
+                <span className="text-green-500 text-center">Yes</span>
+            ) : (
+                <span className="text-red-500 ml-auto text-center">No</span>
+            );
+        },
     },
     {
         accessorKey: "isUser",
-        header: "User",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                    className="w-full"
+                >
+                    User
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            return row.getValue("isUser") ? (
+                <span className="text-green-500 text-center">Yes</span>
+            ) : (
+                <span className="text-red-500 ml-auto text-center">No</span>
+            );
+        },
     },
 ];

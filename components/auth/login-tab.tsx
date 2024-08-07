@@ -13,7 +13,7 @@ import { TabsContent } from "@/components/ui/tabs";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { LoginSchema } from "@/schemas/signup-schema";
+import { LoginSchema } from "@/schemas/login-schema";
 import { useState } from "react";
 import LoginProvider from "@/components/auth/loginProvider";
 import { login } from "@/firebase/user";

@@ -1,5 +1,3 @@
-import { StringValidation } from "zod";
-
 export type User = {
     email: string;
     password: string;
@@ -14,4 +12,5 @@ export interface UserRole {
 export interface UserSchema extends UserRole {
     id: string;
     email: string;
+    displayName?: string;
 }
