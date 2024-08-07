@@ -63,7 +63,7 @@ function SignInTab() {
                 password: values.password,
             });
 
-            setSuccess("Account created successfully");
+            setSuccess("Check your email account for verification");
             form.reset();
             setTimeout(() => {
                 setSuccess("");

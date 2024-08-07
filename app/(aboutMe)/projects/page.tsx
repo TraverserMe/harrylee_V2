@@ -181,6 +181,46 @@ function ProjectsPage() {
                     </Link>
                 </div>
             </section>
+
+            <hr />
+            <section id="#project_3" className="mt-4 p-2 ">
+                <div className="flex flex-1 font-bold ">
+                    <div className="w-full text-wrap ">
+                        <h1 className="text-lg md:text-xl underline">
+                            harryleeV2.com
+                        </h1>
+                        <h2 className="text-sm md:text-lg">
+                            This website you are viewing
+                        </h2>
+                        <p className="mt-2 px-4">
+                            <strong>Technologies:</strong> HTML, CSS,
+                            JavaScript, NextJs, Tailwindcss, Firebase Auth,
+                            Firebase Storage, Firebase realtime database
+                        </p>
+                        <br />
+                        <p className="px-4">
+                            <strong>About:</strong> This is my second version of
+                            my personal website. The website is built with
+                            NextJs and Tailwindcss. The website is like my
+                            playground. The website is built with Firebase for
+                            authentication and storage. It has bus stop
+                            information(work in progress).
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <Link
+                        href={"https://github.com/TraverserMe/harrylee_V2"}
+                        className="text-base break-all"
+                        target="_blank"
+                    >
+                        Github:{" "}
+                        <span className="hover:underline text-blue-500 ">
+                            https://github.com/TraverserMe/harrylee_V2
+                        </span>
+                    </Link>
+                </div>
+            </section>
         </>
     );
 }

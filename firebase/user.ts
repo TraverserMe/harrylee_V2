@@ -1,4 +1,4 @@
-import { User, UserRole } from "@/schemas/user-schema";
+import { User } from "@/schemas/user-schema";
 import {
     signInWithEmailAndPassword,
     signOut,
@@ -32,7 +32,7 @@ export const createUser = async (user: User) => {
     return userCredential;
 };
 
-export const getUserInfo = async (uid: string) => {
+export const getCurrentUserInfo = async () => {
     const user = await auth.currentUser?.getIdTokenResult();
     return user;
 }
