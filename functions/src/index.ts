@@ -27,14 +27,39 @@ const app = initializeApp();
 const adminAuth = getAuth(app);
 const db = getFirestore(app);
 
+// export const setCustomClaims = onCall({ region: 'asia-northeast1' }, async (request) => {
+//     const { uid, claims, adminId }: { uid: string; claims: UserRole, adminId: string } = request.data
+//     if (!uid) return new HttpsError('invalid-argument', 'uid is required');
+//     if (!claims) return new HttpsError('invalid-argument', 'claims is required');
+//     if (!adminId) return new HttpsError('invalid-argument', 'adminId is required');
+
+//     const admin = await adminAuth.getUser(adminId);
+//     if (admin.customClaims?.isAdmin !== true) return new HttpsError('permission-denied', 'Unauthorized');
+
+//     // Setting custom user claims
+//     await adminAuth.setCustomUserClaims(uid, claims);
+
+//     //store in firestore
+//     const userRef = db.collection('users').doc(uid);
+//     await userRef.update(
+//         {
+//             isAdmin: claims.isAdmin,
+//             isUser: claims.isUser,
+//         }
+//     );
+//     return "success";
+// })
+
 export const setCustomClaims = onCall({ region: 'asia-northeast1' }, async (request) => {
-    const { uid, claims, adminId }: { uid: string; claims: UserRole, adminId: string } = request.data
+    const authId = request.auth?.uid;
+    // logger.log('uid', authId);
+    if (!authId) return new HttpsError('invalid-argument', 'authId is required');
+    const admin = await adminAuth.getUser(authId);
+    if (!admin.customClaims?.isAdmin || !admin.customClaims?.isOwner) return new HttpsError('permission-denied', 'Unauthorized');
+
+    const { uid, claims }: { uid: string; claims: UserRole } = request.data
     if (!uid) return new HttpsError('invalid-argument', 'uid is required');
     if (!claims) return new HttpsError('invalid-argument', 'claims is required');
-    if (!adminId) return new HttpsError('invalid-argument', 'adminId is required');
-
-    const admin = await adminAuth.getUser(adminId);
-    if (admin.customClaims?.isAdmin !== true) return new HttpsError('permission-denied', 'Unauthorized');
 
     // Setting custom user claims
     await adminAuth.setCustomUserClaims(uid, claims);
@@ -49,6 +74,7 @@ export const setCustomClaims = onCall({ region: 'asia-northeast1' }, async (requ
     );
     return "success";
 })
+
 
 // exports.setCustomClaims = onRequest({ region: 'asia-northeast1' }, async (request: any) => {
 //     logger.log('uid', request.auth.uid);

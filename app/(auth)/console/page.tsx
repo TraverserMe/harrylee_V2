@@ -1,8 +1,12 @@
 "use client";
 import { auth } from "@/firebase/config";
-import { getCurrentUserInfo, getUsers } from "@/firebase/user";
+import {
+    getCurrentUserInfo,
+    getUsers,
+    setCustomUserClaims,
+} from "@/firebase/user";
 import { UserRole, UserSchema } from "@/schemas/user-schema";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/data-table";
@@ -11,8 +15,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import queryString from "query-string";
-import axios from "axios";
 
 function ConsolePage() {
     const router = useRouter();
@@ -90,23 +92,14 @@ function ConsolePage() {
                 return router.push("/");
             }
 
-            const url = queryString.stringifyUrl({
-                url: "/api/firebase/admin/setCustomUserClaims",
-            });
-
             if (!selectedUser) return console.log("user not found");
-
-            const res = await axios.patch(url, {
-                uid: selectedUser?.id,
-                claims: {
-                    isAdmin: userIsAdmin,
-                    isUser: userIsUser,
-                },
-                adminId: user?.uid,
+            const res = await setCustomUserClaims(selectedUser.id, {
+                isAdmin: userIsAdmin,
+                isUser: userIsUser,
             });
+
             console.log(res);
             setSelectedUser(null);
-
             getUsers().then((users) => {
                 setUsers(users);
             });

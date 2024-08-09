@@ -4,7 +4,7 @@ export type User = {
 };
 
 export interface UserRole {
-    isOwner: boolean;
+    isOwner?: boolean;
     isAdmin: boolean;
     isUser: boolean;
 }

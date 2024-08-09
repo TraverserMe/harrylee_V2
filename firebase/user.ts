@@ -1,14 +1,15 @@
-import { User } from "@/schemas/user-schema";
+import { User, UserRole } from "@/schemas/user-schema";
 import {
     signInWithEmailAndPassword,
     signOut,
     createUserWithEmailAndPassword,
     sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "@/firebase/config";
+import { app, auth } from "@/firebase/config";
 import { UserSchema } from "@/schemas/user-schema";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/firebase/config";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 export const login = (user: User) => {
     return signInWithEmailAndPassword(auth, user.email, user.password);
@@ -47,4 +48,26 @@ export const getUsers = async () => {
         } as UserSchema)
     })
     return res
+}
+
+export const setCustomUserClaims = async (uid: string, claims: UserRole) => {
+    if (!uid) return {
+        error: "uid is required"
+    }
+    if (!claims) return {
+        error: "claims is required"
+    }
+    try {
+        const functions = getFunctions(app, "asia-northeast1");
+        // console.log("functions", functions);
+        const setCustomClaims = httpsCallable(functions, "setCustomClaims");
+        const res = await setCustomClaims({ uid, claims });
+        return res;
+    } catch (error) {
+        console.log(error);
+        return {
+            error: "Internal Server Error"
+        }
+    }
+
 }
