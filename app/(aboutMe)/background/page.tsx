@@ -208,8 +208,6 @@ function BackgroundPage() {
                     Click the button below to download my resume.
                 </p>
             </div>
-
-            <button onClick={() => signOut()}>Logout</button>
         </>
     );
 }

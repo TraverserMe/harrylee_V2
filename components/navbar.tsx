@@ -33,7 +33,6 @@ import {
 } from "@/components/ui/accordion";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Session } from "next-auth";
 
 const components: { title: string; href: string; description: string }[] = [
     {
