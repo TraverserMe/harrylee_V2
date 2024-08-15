@@ -12,10 +12,6 @@ export const CurrentUser = () => {
     const session = useSession();
     const router = useRouter();
 
-    useEffect(() => {
-        console.log(session);
-    }, [session]);
-
     if (session.status === "loading") {
         return <LoadingWithText text="Loading..." />;
     }
