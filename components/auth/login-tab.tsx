@@ -59,7 +59,7 @@ function LoginTab() {
 
         try {
             const res = await login(values);
-            console.log(res);
+            // console.log(res);
 
             if (res.error) {
                 setError(res.error);
@@ -77,7 +77,7 @@ function LoginTab() {
         } catch (error) {
             console.log("error", error);
 
-            setError("Maybe you have use other provider?");
+            // setError("Maybe you have use other provider?");
         }
     };
 

@@ -66,9 +66,8 @@ function SignInTab() {
             setSuccess("Check your email account for verification");
             form.reset();
             setTimeout(() => {
-                setSuccess("");
                 router.push("/login");
-            }, 1000);
+            }, 3000);
         } catch (error) {
             if (
                 error instanceof FirebaseError &&

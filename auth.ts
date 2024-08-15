@@ -2,7 +2,7 @@ import { FirestoreAdapter } from "@auth/firebase-adapter"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials";
 import NextAuth, { type DefaultSession } from "next-auth"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from "firebase/auth";
 import { auth as GoogleAuth } from "@/firebase/config";
 import { cert } from "firebase-admin/app";
 import { UserRole } from "@/schemas/user-schema";
@@ -34,48 +34,30 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     pages: {
         signIn: "/login",
     },
-    providers: [Google({
-        clientId: process.env.AUTH_GOOGLE_ID,
-        clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        allowDangerousEmailAccountLinking: true,
-    }),
-    Credentials({
-        name: "credentials",
-        credentials: {
-            email: {},
-            password: {},
-        },
-        async authorize(credentials): Promise<any> {
-            const { email, password } = credentials as { email: string, password: string };
-            const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
-            // console.log("userCredential.user", userCredential.user)
-            if (userCredential) {
-                return userCredential.user
-            } else {
-                return null;
-            }
-        }
-    })
-    ],
     adapter: FirestoreAdapter(
         {
             credential: cert({
                 projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
                 clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY ? process.env.AUTH_FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
-                    : undefined,
+                privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY,
             }),
         }
     ),
     callbacks: {
-        async signIn({ user, account }) {
-            // if (account?.provider === "credentials") {
-            //     // console.log("user", user)
-            // }
-            return true
+        async signIn({ user, account, profile, email, credentials }) {
+            if (account?.provider === 'google') {
+                await signInWithCredential(
+                    GoogleAuth,
+                    GoogleAuthProvider.credential(
+                        account.id_token,
+                        account.access_token
+                    )
+                );
+                return true;
+            }
+            return true;
         },
         async session({ token, session, user }) {
-            // console.log("token", token)
             if (!token) {
                 session.user.id = user.id
             }
@@ -97,17 +79,19 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 session.user.image = token.picture;
                 session.user.name = token.name;
             }
-            console.log("session", session)
+            // console.log("session", session)
 
             return session;
         },
         async jwt({ token }) {
             if (!token.email) return token;
-            // console.log("token111", token.email)
 
             const existingUser = await getUserByEmail(token.email);
 
-            // console.log("existingUser", existingUser)
+            if (!existingUser) {
+                console.log("existingUser", existingUser)
+                return token
+            }
 
             if (!existingUser.customClaims) return token;
 
@@ -121,4 +105,35 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         },
     },
     session: { strategy: "jwt" },
+    providers: [Google({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        allowDangerousEmailAccountLinking: true,
+        authorization: {
+            params: {
+                prompt: "consent",
+                access_type: "offline",
+                response_type: "code"
+            }
+        }
+    }),
+    Credentials({
+        name: "credentials",
+        credentials: {
+            email: {},
+            password: {},
+        },
+        async authorize(credentials): Promise<any> {
+            if (!credentials) return null
+            const { email, password } = credentials as { email: string, password: string };
+            const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
+            // console.log("userCredential.user", userCredential.user)
+            if (userCredential) {
+                return userCredential.user
+            } else {
+                return null;
+            }
+        }
+    })
+    ],
 })
