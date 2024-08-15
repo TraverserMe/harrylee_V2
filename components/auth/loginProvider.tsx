@@ -1,5 +1,6 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 // import { auth } from "@/firebase/config";
@@ -12,7 +13,13 @@ import { loginWithGoogle } from "@/action/sign-in";
 function LoginProvider() {
     return (
         <div className="w-full flex flex-col gap-2">
-            <Button onClick={async () => await loginWithGoogle()}>
+            <Button
+                onClick={() => {
+                    signIn("google", {
+                        // redirectTo: "/",
+                    });
+                }}
+            >
                 <FcGoogle className="h-5 w-5" />
                 <span className="ml-2">Sign In with Google</span>
                 {/* {isLoading ? (
