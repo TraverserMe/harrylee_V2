@@ -1,5 +1,6 @@
 "use client";
 
+import { setCustomClaims } from "@/action/firestore";
 import { columns } from "@/components/columns";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { auth, db } from "@/firebase/config";
 import { UserSchema } from "@/schemas/user-schema";
 
 import { collection, onSnapshot } from "firebase/firestore";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
@@ -17,20 +19,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 
 const ConsolePage = () => {
     const router = useRouter();
-    const [user, loading, error] = useAuthState(auth, {
-        onUserChanged: async (user) => {
-            if (!user) {
-                router.push("/login");
-            }
-        },
-    });
+    const session = useSession();
 
     const [users, setUsers] = useState<UserSchema[]>([]);
     const [permitted, setPermitted] = useState(false);
     const [selectedUser, setSelectedUser] = useState<UserSchema | null>(null);
     const [userIsAdmin, setUserIsAdmin] = useState<boolean>(false);
     const [userIsUser, setUserIsUser] = useState<boolean>(false);
-    const [loadingPermissions, setLoadingPermissions] = useState(false);
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
@@ -39,51 +34,29 @@ const ConsolePage = () => {
         setUserIsUser(selectedUser.isUser);
     }, [selectedUser]);
 
-    // const onSave = async () => {
-    //     setSaving(true);
-    //     try {
-    //         if (!selectedUser || !user) return;
-    //         const url = queryString.stringifyUrl({
-    //             url: "/api/firebase/admin/setCustomUserClaims",
-    //         });
-    //         console.log(url);
+    const onSave = async () => {
+        setSaving(true);
+        try {
+            if (!selectedUser || !session.data) return;
 
-    //         const res = await axios.patch(url, {
-    //             uid: selectedUser.id,
-    //             claims: {
-    //                 isAdmin: userIsAdmin,
-    //                 isUser: userIsUser,
-    //             },
-    //             adminId: user.uid,
-    //         });
-    //         console.log(res);
-    //     } catch (error) {
-    //         console.log(error);
-    //     } finally {
-    //         setSaving(false);
-    //     }
-    // };
+            const res = await setCustomClaims(
+                selectedUser.id,
+                {
+                    isAdmin: userIsAdmin,
+                    isUser: userIsUser,
+                },
+                session.data.user.id
+            );
+            console.log(res);
 
-    useEffect(() => {
-        if (user) {
-            setLoadingPermissions(true);
-            auth.currentUser
-                ?.getIdTokenResult(/* forceRefresh */ true)
-                .then((idTokenResult) => {
-                    if (
-                        (idTokenResult.claims.isAdmin as boolean) ||
-                        (idTokenResult.claims.isOwner as boolean)
-                    ) {
-                        setPermitted(true);
-                    }
-                })
-                .finally(() => {
-                    setLoadingPermissions(false);
-                });
+            setSelectedUser(null);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setSaving(false);
         }
-    }, [user]);
-    // Fetch data from Firestore using useCollection
-    // useEffect to set up the listener and detach it when unmounting
+    };
+
     useEffect(() => {
         if (permitted) {
             const unsubscribe = onSnapshot(collection(db, "users"), (data) => {
@@ -92,10 +65,12 @@ const ConsolePage = () => {
 
                     let users = [] as UserSchema[];
                     data.forEach((doc) => {
-                        users.push({
-                            id: doc.id,
-                            ...doc.data(),
-                        } as UserSchema);
+                        if (doc.id.length > 20) {
+                            users.push({
+                                id: doc.id,
+                                ...doc.data(),
+                            } as UserSchema);
+                        }
                     });
                     setUsers(users);
                 } else {
@@ -110,17 +85,24 @@ const ConsolePage = () => {
         }
     }, [permitted]); // Empty dependency array means it runs once on mount
 
-    if (loading) {
+    if (session.status === "loading") {
         return <main>Loading...</main>;
     }
-    if (error) {
-        return <main>Error: {error.message}</main>;
-    }
-    if (!user) {
+
+    if (session.status === "unauthenticated") {
+        setTimeout(() => {
+            router.push("/login");
+        }, 3000);
         return <main>Please sign in</main>;
     }
 
-    if (!permitted && !loadingPermissions) {
+    if (session.status === "authenticated") {
+        if (!permitted) {
+            setPermitted(session.data?.user?.role.isAdmin);
+        }
+    }
+
+    if (!permitted) {
         return <main>Unauthorized</main>;
     }
 
@@ -171,7 +153,7 @@ const ConsolePage = () => {
                                         (selectedUser.isAdmin === userIsAdmin &&
                                             selectedUser.isUser === userIsUser)
                                     }
-                                    // onClick={onSave}
+                                    onClick={onSave}
                                 >
                                     Save
                                 </Button>
