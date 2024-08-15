@@ -1,12 +1,14 @@
-import { logout } from "@/firebase/user";
+"use client";
+
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { logout } from "@/action/logout";
 
 function LogoutButton() {
     return (
         <Button
-            onClick={() => {
-                logout();
+            onClick={async () => {
+                await logout();
                 window.location.reload();
             }}
             className="flex items-center w-full "

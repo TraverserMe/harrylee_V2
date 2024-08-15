@@ -14,10 +14,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LoginSchema } from "@/schemas/login-schema";
-import { useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import LoginProvider from "@/components/auth/loginProvider";
-import { login } from "@/firebase/user";
-import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form-error";
@@ -30,13 +28,16 @@ import {
     FormField,
     FormMessage,
 } from "@/components/ui/form";
-import { signOut } from "firebase/auth";
-import { auth } from "@/firebase/config";
+import { login } from "@/action/sign-in";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 
 function LoginTab() {
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
+    const session = useSession();
     const router = useRouter();
+
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
@@ -53,39 +54,36 @@ function LoginTab() {
     const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         setError("");
         setSuccess("");
-        try {
-            const UserCredential = await login({
-                email: values.email,
-                password: values.password,
-            });
 
-            if (!UserCredential.user.emailVerified) {
-                setError("Please verify your email first");
-                signOut(auth);
+        // leekinnangharry3@gmail.com
+
+        try {
+            const res = await login(values);
+            console.log(res);
+
+            if (res.error) {
+                setError(res.error);
                 return;
             }
-            setSuccess("Login successful");
-            form.reset();
-            setTimeout(() => {
-                setSuccess("");
-                router.push("/");
-            }, 1000);
-        } catch (error) {
-            if (
-                error instanceof FirebaseError &&
-                error.code == "auth/user-not-found"
-            ) {
-                setError("User not found");
-            } else if (
-                error instanceof FirebaseError &&
-                error.code == "auth/wrong-password"
-            ) {
-                setError("Wrong password");
-            } else {
-                setError("Maybe you have use other provider?");
+
+            if (res.success) {
+                setSuccess(res.success);
+                form.reset();
+                setTimeout(() => {
+                    setSuccess("");
+                    window.location.reload();
+                }, 1000);
             }
+        } catch (error) {
+            console.log("error", error);
+
+            setError("Maybe you have use other provider?");
         }
     };
+
+    if (session.status === "authenticated") {
+        router.push("/");
+    }
 
     return (
         <TabsContent value="Login">

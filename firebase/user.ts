@@ -34,7 +34,7 @@ export const createUser = async (user: User) => {
 };
 
 export const getCurrentUserInfo = async () => {
-    const user = await auth.currentUser?.getIdTokenResult();
+    const user = await auth.currentUser?.getIdTokenResult(/* forceRefresh */ true);
     return user;
 }
 
@@ -57,17 +57,17 @@ export const setCustomUserClaims = async (uid: string, claims: UserRole) => {
     if (!claims) return {
         error: "claims is required"
     }
-    try {
-        const functions = getFunctions(app, "asia-northeast1");
-        // console.log("functions", functions);
-        const setCustomClaims = httpsCallable(functions, "setCustomClaims");
-        const res = await setCustomClaims({ uid, claims });
-        return res;
-    } catch (error) {
-        console.log(error);
-        return {
-            error: "Internal Server Error"
-        }
-    }
-
+    // try {
+    //     const functions = getFunctions(app, "asia-northeast1");
+    //     // console.log("functions", functions);
+    //     const setCustomClaims = httpsCallable(functions, "setCustomClaims");
+    //     const res = await setCustomClaims({ uid, claims });
+    //     return res;
+    // } catch (error) {
+    //     console.log(error);
+    //     return {
+    //         error: "Internal Server Error"
+    //     }
+    // }
+    return true
 }

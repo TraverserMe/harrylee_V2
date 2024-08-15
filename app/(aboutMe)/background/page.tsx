@@ -2,11 +2,12 @@
 import TitleBar from "@/components/design/titleBar";
 import { retrieveUser, firstTimeClaim } from "@/firebase/admin/admin";
 import queryString from "query-string";
-import axios from "axios";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
+import { getSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 function BackgroundPage() {
     // const test = async () => {
@@ -36,6 +37,11 @@ function BackgroundPage() {
     //     }
     //     // const user = await retrieveUser("nouJSYa4k8PpmlBLG263pJaCsrD3");
     //     // console.log(user);
+    // };
+
+    // const test2 = async () => {
+    //     const user = await getSession();
+    //     console.log(user);
     // };
 
     return (
@@ -202,6 +208,8 @@ function BackgroundPage() {
                     Click the button below to download my resume.
                 </p>
             </div>
+
+            <button onClick={() => signOut()}>Logout</button>
         </>
     );
 }

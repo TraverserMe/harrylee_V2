@@ -13,4 +13,5 @@ export interface UserSchema extends UserRole {
     id: string;
     email: string;
     displayName?: string;
+    image?: string;
 }
