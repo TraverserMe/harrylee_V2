@@ -13,7 +13,6 @@ export const login = async (values: z.infer<typeof LoginSchema>, callbackUrl?: s
         return { error: "Invalid fields!" };
     }
 
-    console.log("hi");
     const { email, password } = validatedFields.data
 
     // revalidatePath("/")
@@ -36,5 +35,5 @@ export const loginWithGoogle = async (callbackUrl?: string | null) => {
         redirectTo: callbackUrl || "/",
     });
 
-    console.log("Google_res", res);
+    // console.log("Google_res", res);
 }
