@@ -42,5 +42,5 @@ export const loginWithGoogle = async (callbackUrl?: string | null) => {
         redirectTo: callbackUrl || "/",
     });
 
-    console.log("Google_res", res);
+    // console.log("Google_res", res);
 }

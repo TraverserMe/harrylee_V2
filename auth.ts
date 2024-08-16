@@ -34,6 +34,37 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     pages: {
         signIn: "/login",
     },
+    providers: [Google({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        allowDangerousEmailAccountLinking: true,
+        // authorization: {
+        //     params: {
+        //         prompt: "consent",
+        //         access_type: "offline",
+        //         response_type: "code"
+        //     }
+        // }
+    }),
+    Credentials({
+        name: "credentials",
+        credentials: {
+            email: {},
+            password: {},
+        },
+        async authorize(credentials): Promise<any> {
+            if (!credentials) return null
+            const { email, password } = credentials as { email: string, password: string };
+            const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
+            // console.log("userCredential.user", userCredential.user)
+            if (userCredential) {
+                return userCredential.user
+            } else {
+                return null;
+            }
+        }
+    })
+    ],
     adapter: FirestoreAdapter(
         {
             credential: cert({
@@ -44,15 +75,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         }
     ),
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }) {
+        async signIn({ account }) {
             if (account?.provider === 'google') {
-                await signInWithCredential(
+                const UserCredential = await signInWithCredential(
                     GoogleAuth,
                     GoogleAuthProvider.credential(
                         account.id_token,
                         account.access_token
                     )
                 );
+
+                console.log("UserCredential", UserCredential)
                 return true;
             }
             return true;
@@ -89,7 +122,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             const existingUser = await getUserByEmail(token.email);
 
             if (!existingUser) {
-                console.log("existingUser", existingUser)
+                // console.log("existingUser", existingUser)
                 return token
             }
 
@@ -105,35 +138,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         },
     },
     session: { strategy: "jwt" },
-    providers: [Google({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        allowDangerousEmailAccountLinking: true,
-        authorization: {
-            params: {
-                prompt: "consent",
-                access_type: "offline",
-                response_type: "code"
-            }
-        }
-    }),
-    Credentials({
-        name: "credentials",
-        credentials: {
-            email: {},
-            password: {},
-        },
-        async authorize(credentials): Promise<any> {
-            if (!credentials) return null
-            const { email, password } = credentials as { email: string, password: string };
-            const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
-            // console.log("userCredential.user", userCredential.user)
-            if (userCredential) {
-                return userCredential.user
-            } else {
-                return null;
-            }
-        }
-    })
-    ],
+
 })
