@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { auth, db } from "@/firebase/config";
+import { db } from "@/firebase/config";
 import { UserSchema } from "@/schemas/user-schema";
 
 import { collection, onSnapshot } from "firebase/firestore";
@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import queryString from "query-string";
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 const ConsolePage = () => {
     const router = useRouter();
