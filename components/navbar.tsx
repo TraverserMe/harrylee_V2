@@ -110,6 +110,7 @@ export default function Navbar() {
                                         alt="logo"
                                         width={50}
                                         height={50}
+                                        priority={true}
                                     />
                                 </Link>
                             </ActionTooltip>

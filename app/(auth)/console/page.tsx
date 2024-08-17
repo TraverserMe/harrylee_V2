@@ -33,6 +33,19 @@ const ConsolePage = () => {
         setUserIsUser(selectedUser.isUser);
     }, [selectedUser]);
 
+    useEffect(() => {
+        if (!session.data) return;
+        if (session.data.user.role.isAdmin || session.data.user.role.isOwner) {
+            setPermitted(true);
+            return;
+        } else {
+            setPermitted(false);
+            setTimeout(() => {
+                router.push("/");
+            }, 1000);
+        }
+    }, [session.data]);
+
     const onSave = async () => {
         setSaving(true);
         try {
@@ -93,12 +106,6 @@ const ConsolePage = () => {
             router.push("/login");
         }, 3000);
         return <main>Please sign in</main>;
-    }
-
-    if (session.status === "authenticated") {
-        if (!permitted) {
-            setPermitted(session.data?.user?.role.isAdmin);
-        }
     }
 
     if (!permitted) {
