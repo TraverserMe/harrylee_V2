@@ -15,7 +15,7 @@ export type RouteStopInfo = {
 }
 
 export type StopETA = {
-    stop: string,
+    stop: StopInfo,
     co: "KMB",
     route: string,
     dir: string,
@@ -27,4 +27,10 @@ export type StopETA = {
     eta: string,
     rmk_tc: string,
     rmk_en: string
+}
+
+export type RouteETA = {
+    stopETA: StopETA[],
+    routeInfo: RouteStopInfo
+    stopInfo: StopInfo
 }

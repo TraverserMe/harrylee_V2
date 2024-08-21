@@ -1,6 +1,6 @@
 "use server";
 
-import { RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
+import { RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
 
 export const getAllBusStops = async () => {
@@ -15,6 +15,7 @@ export const getAllBusStops = async () => {
     // return json as StopInfo[]
 };
 
+//this function is not available on the server side when this is a hobby plan
 export const getNearByBusStops = async ({
     userLocation,
     range,
@@ -82,7 +83,7 @@ export const getNearByBusStops = async ({
                 stopETA.eta
             ) {
                 nearestBusStopETA.push({
-                    stop: nearByBusStops[i].name_tc,
+                    stop: nearByBusStops[i],
                     ...stopETA,
                 });
             }
@@ -102,3 +103,36 @@ export const getAllRoutes = async () => {
     const json = await res.json();
     return json.data as RouteStopInfo[];
 };
+
+export const getRouteETA = async (route: string, dir: string, serviceType: string) => {
+
+    let busStopETA = [] as RouteETA[]
+    const res = await fetch("https://data.etabus.gov.hk/v1/transport/kmb/route-stop/" + route + "/" + dir + "/" + serviceType);
+    const json = await res.json()
+
+    const busRouteStops = json.data as RouteStopInfo[]
+
+    for (let i = 0; i < busRouteStops.length; i++) {
+
+        const res = await fetch("https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" + busRouteStops[i].stop, {
+            cache: "no-cache",
+        })
+        const json = await res.json()
+
+        const stopRes = await fetch("https://data.etabus.gov.hk/v1/transport/kmb/stop/" + busRouteStops[i].stop,
+        )
+        const stopJson = await stopRes.json()
+
+        const stopInfo = stopJson.data as StopInfo
+        const stopETA = json.data as StopETA[]
+
+        busStopETA.push({
+            routeInfo: busRouteStops[i],
+            stopETA: stopETA.filter((eta) => (eta.route === route && eta.dir === busRouteStops[i].bound)),
+            stopInfo: stopInfo
+        })
+
+    }
+
+    return busStopETA
+}

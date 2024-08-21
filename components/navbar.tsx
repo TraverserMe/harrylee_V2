@@ -202,7 +202,7 @@ export default function Navbar() {
     }
 
     return (
-        <nav className="flex flex-1 items-center justify-between px-2 md:hidden z-50 sticky top-0 bg-slate-50 dark:bg-neutral-900">
+        <nav className="flex flex-1 items-center justify-between h-[50px] px-2 md:hidden z-50 sticky top-0 bg-slate-50 dark:bg-neutral-900">
             <Link href={"/"}>
                 <Image
                     src={"/image/logo.png"}

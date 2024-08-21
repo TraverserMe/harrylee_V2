@@ -15,21 +15,29 @@ function BusRow({
 }) {
     return (
         <div className="flex items-center flex-row text-center border-b-2">
-            <div className="w-1/6 font-extrabold text-xl">{busRoute}</div>
-            <div className="flex-1 flex flex-col h-12 text-start">
+            <div className="w-1/6 font-extrabold text-2xl">{busRoute}</div>
+            <div className="flex-1 flex flex-col h-14 text-start">
                 <span>
-                    往<span className="font-bold text-base">{dest}</span>
+                    <span className="text-sm">往</span>
+                    <span className="font-bold text-lg">{dest}</span>
                 </span>
                 <span>{busStop}</span>
             </div>
             <div className="w-2/6 flex flex-col">
                 {moment(eta, "YYYY-MM-DD HH:mm:ss").diff(moment(), "minutes") >
-                0
-                    ? moment(eta, "YYYY-MM-DD HH:mm:ss").diff(
-                          moment(),
-                          "minutes"
-                      ) + " 分鐘"
-                    : "即將到達"}{" "}
+                0 ? (
+                    <span>
+                        <span className="text-blue-600 text-xl font-extrabold">
+                            {moment(eta, "YYYY-MM-DD HH:mm:ss").diff(
+                                moment(),
+                                "minutes"
+                            )}
+                        </span>{" "}
+                        分鐘
+                    </span>
+                ) : (
+                    "即將到達"
+                )}{" "}
                 <span className="text-red-500 text-sm">{rmk}</span>
             </div>
             {/* <>{moment(eta, "YYYY-MM-DD HH:mm:ss").format("HH:mm")}</> */}

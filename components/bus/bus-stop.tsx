@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import BusRow from "@/components/bus/bus-page-row";
 import { calculateDistance } from "@/utils/bus";
 import LoadingWithText from "../loading-with-text";
+import Link from "next/link";
 
 async function getData({
     userLocation,
@@ -75,7 +76,7 @@ async function getData({
                 stopETA.eta
             ) {
                 nearestBusStopETA.push({
-                    stop: nearByBusStops[i].name_tc,
+                    stop: nearByBusStops[i],
                     ...stopETA,
                 });
             }
@@ -99,7 +100,7 @@ function BusStop() {
     const [nearestBusStop, setNearestBusStop] = useState<StopInfo[]>([]);
     const [nearestBusStopETA, setNearestBusStopETA] = useState<StopETA[]>([]);
 
-    const range = 2000; //meters
+    const range = 500; //meters
 
     useEffect(() => {
         if (!navigator.geolocation) {
@@ -148,7 +149,7 @@ function BusStop() {
     }, [userLocation]);
 
     return (
-        <ScrollArea className="h-[520px]">
+        <ScrollArea className="h-[calc(100vh-200px)] max-h-[700px]">
             {/* {userLocation.lat} {userLocation.long} */}
             {/* <br /> */}
             {nearestBusStopETA.length === 0 && (
@@ -162,13 +163,26 @@ function BusStop() {
                     )
                     .map((stop, index) => (
                         <div key={index}>
-                            <BusRow
-                                busRoute={stop.route}
-                                dest={stop.dest_tc}
-                                eta={stop.eta}
-                                rmk={stop.rmk_tc}
-                                busStop={stop.stop}
-                            />
+                            <Link
+                                href={
+                                    "/bus/id/" +
+                                    stop.route +
+                                    "&" +
+                                    stop.dir +
+                                    "&" +
+                                    stop.service_type +
+                                    "&" +
+                                    stop.seq
+                                }
+                            >
+                                <BusRow
+                                    busRoute={stop.route}
+                                    dest={stop.dest_tc}
+                                    eta={stop.eta}
+                                    rmk={stop.rmk_tc}
+                                    busStop={stop.stop.name_tc}
+                                />
+                            </Link>
                         </div>
                     ))}
         </ScrollArea>
