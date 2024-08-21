@@ -8,10 +8,56 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { RouteETA } from "@/schemas/bus";
+import { RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+async function getData(route: string, dir: string, serviceType: string) {
+    let busStopETA = [] as RouteETA[];
+    const res = await fetch(
+        "https://data.etabus.gov.hk/v1/transport/kmb/route-stop/" +
+            route +
+            "/" +
+            dir +
+            "/" +
+            serviceType
+    );
+    const json = await res.json();
+
+    const busRouteStops = json.data as RouteStopInfo[];
+
+    for (let i = 0; i < busRouteStops.length; i++) {
+        const res = await fetch(
+            "https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" +
+                busRouteStops[i].stop,
+            {
+                cache: "no-cache",
+            }
+        );
+        const json = await res.json();
+
+        const stopRes = await fetch(
+            "https://data.etabus.gov.hk/v1/transport/kmb/stop/" +
+                busRouteStops[i].stop
+        );
+        const stopJson = await stopRes.json();
+
+        const stopInfo = stopJson.data as StopInfo;
+        const stopETA = json.data as StopETA[];
+
+        busStopETA.push({
+            routeInfo: busRouteStops[i],
+            stopETA: stopETA.filter(
+                (eta) =>
+                    eta.route === route && eta.dir === busRouteStops[i].bound
+            ),
+            stopInfo: stopInfo,
+        });
+    }
+
+    return busStopETA;
+}
 
 function BusRoutePage() {
     const [userLocation, setUserLocation] = useState({
@@ -33,7 +79,7 @@ function BusRoutePage() {
     const [routeInfo, setRouteInfo] = useState<RouteETA[]>();
 
     useEffect(() => {
-        getRouteETA(route, dir, serviceType).then((routeInfo) => {
+        getData(route, dir, serviceType).then((routeInfo) => {
             setRouteInfo(routeInfo);
             console.log(routeInfo);
         });
@@ -44,7 +90,7 @@ function BusRoutePage() {
             clearInterval(interval.current);
         }
         interval.current = setInterval(() => {
-            getRouteETA(route, dir, serviceType).then((routeInfo) => {
+            getData(route, dir, serviceType).then((routeInfo) => {
                 setRouteInfo(routeInfo);
             });
         }, 55000);
