@@ -17,7 +17,7 @@ function BusStop() {
     const [nearestBusStop, setNearestBusStop] = useState<StopInfo[]>([]);
     const [nearestBusStopETA, setNearestBusStopETA] = useState<StopETA[]>([]);
 
-    const range = 500; //meters
+    const range = 1000; //meters
 
     useEffect(() => {
         if (!navigator.geolocation) {
@@ -32,7 +32,7 @@ function BusStop() {
                 range,
             }).then((res) => {
                 if ("error" in res) {
-                    // console.log(res.error);
+                    console.log(res.error);
                     return;
                 }
                 setNearestBusStop(res.busStops);
