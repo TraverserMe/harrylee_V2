@@ -5,17 +5,15 @@ import { calculateDistance } from "@/utils/bus";
 import { error } from "console";
 
 export const getAllBusStops = async () => {
-    try {
-        const res = await fetch(
-            "https://data.etabus.gov.hk/v1/transport/kmb/stop"
-        );
-        // console.log(res.json())
-        const json = await res.json();
-        return json.data as StopInfo[];
-    } catch (error) {
-        // console.log(error)
-        return [];
-    }
+    const res = await fetch(
+        "https://data.etabus.gov.hk/v1/transport/kmb/stop"
+    );
+
+    const json = await res.json();
+    return json.data as StopInfo[];
+
+    // console.log(res.json())
+
     // return json as StopInfo[]
 };
 
@@ -27,8 +25,6 @@ export const getNearByBusStops = async ({
     range: number;
 }) => {
     const allBusStops = await getAllBusStops();
-    if (!allBusStops.length) return { error: "no bus stop found" };
-
     var nearByBusStops = [] as StopInfo[];
     //fetch the nearby bus stops ETA
     var nearestBusStopETA = [] as StopETA[];
