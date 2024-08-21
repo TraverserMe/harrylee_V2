@@ -30,7 +30,7 @@ function ProjectsPage() {
                     </div>
                     <div>
                         <Image
-                            src={"/galaxy-of-moive-thumbnail.png"}
+                            src={"/image/galaxy-of-moive-thumbnail.png"}
                             alt={"Galaxy of Movies"}
                             width={500}
                             height={300}
@@ -99,7 +99,7 @@ function ProjectsPage() {
                     </div>
                     <div className="mt-2">
                         <Image
-                            src={"/fyp-poster.png"}
+                            src={"/image/fyp-poster.png"}
                             alt={"DAO platform"}
                             width={500}
                             height={300}
@@ -160,7 +160,7 @@ function ProjectsPage() {
                     </div>
                     <div className="mt-2">
                         <Image
-                            src={"/version-one-thumbnail.png"}
+                            src={"/image/version-one-thumbnail.png"}
                             alt={"DAO platform"}
                             width={500}
                             height={300}

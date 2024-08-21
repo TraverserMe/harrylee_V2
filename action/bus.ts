@@ -2,22 +2,27 @@
 
 import { RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
+import { promises as fs } from "fs";
+
+// export const getAllBusStops = async () => {
+
+//     const res = await fetch(
+//         "https://data.etabus.gov.hk/v1/transport/kmb/stop"
+//     );
+//     // console.log(res.json())
+//     const json = await Promise.resolve(await res.json());
+//     return json.data as StopInfo[];
+
+//     // return json as StopInfo[]
+// };
 
 export const getAllBusStops = async () => {
-    try {
-        const res = await fetch(
-            "https://data.etabus.gov.hk/v1/transport/kmb/stop"
-        );
-        // console.log(res.json())
-        const json = await res.json();
-        console.log(json.data[10]);
-        return json.data as StopInfo[];
-    } catch (error) {
-        // console.log(error)
-        return [];
-    }
-    // return json as StopInfo[]
+    const path = process.cwd() + "/public/busStop.json"
+    const file = await fs.readFile(path, "utf8");
+    const json = JSON.parse(file);
+    return json.data as StopInfo[]
 };
+
 
 export const getNearByBusStops = async ({
     userLocation,
@@ -27,8 +32,6 @@ export const getNearByBusStops = async ({
     range: number;
 }) => {
     const allBusStops = await getAllBusStops();
-    if (!allBusStops.length) return { error: "no bus stop found" };
-
     var nearByBusStops = [] as StopInfo[];
     //fetch the nearby bus stops ETA
     var nearestBusStopETA = [] as StopETA[];

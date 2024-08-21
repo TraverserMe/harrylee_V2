@@ -164,7 +164,7 @@ function BackgroundPage() {
                                     target="_blank"
                                 >
                                     <Image
-                                        src={"/github-mark.png"}
+                                        src={"/image/github-mark.png"}
                                         width={30}
                                         height={30}
                                         alt="github logo"
@@ -180,7 +180,7 @@ function BackgroundPage() {
                                     className="flex items-center hover:underline"
                                 >
                                     <Image
-                                        src={"/linkedin.svg"}
+                                        src={"/image/linkedin.svg"}
                                         width={30}
                                         height={30}
                                         alt="github logo"

@@ -31,13 +31,8 @@ function BusStop() {
                 },
                 range,
             }).then((res) => {
-                if ("error" in res) {
-                    // console.log(res.error);
-                    return;
-                } else {
-                    setNearestBusStop(res.busStops);
-                    setNearestBusStopETA(res.busStopETA);
-                }
+                setNearestBusStop(res.busStops);
+                setNearestBusStopETA(res.busStopETA);
             });
             setUserLocation({
                 lat: position.coords.latitude,
@@ -50,9 +45,7 @@ function BusStop() {
         if (interval.current) {
             clearInterval(interval.current);
         }
-        console.log(1);
         interval.current = setInterval(() => {
-            console.log(2);
             getNearByBusStops({
                 userLocation: {
                     lat: userLocation.lat,
@@ -60,11 +53,6 @@ function BusStop() {
                 },
                 range,
             }).then((res) => {
-                if ("error" in res) {
-                    // console.log(res.error);
-                    console.log(3);
-                    return;
-                }
                 setNearestBusStop(res.busStops);
                 setNearestBusStopETA(res.busStopETA);
             });
