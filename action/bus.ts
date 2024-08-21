@@ -10,7 +10,7 @@ export const getAllBusStops = async () => {
         );
         // console.log(res.json())
         const json = await res.json();
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log(json.data[10]);
         return json.data as StopInfo[];
     } catch (error) {
         // console.log(error)
