@@ -6,6 +6,7 @@ import { StopETA, StopInfo } from "@/schemas/bus";
 import { useEffect, useRef, useState } from "react";
 import BusRow from "@/components/bus/bus-page-row";
 import { calculateDistance } from "@/utils/bus";
+import LoadingWithText from "../loading-with-text";
 
 async function getData({
     userLocation,
@@ -150,7 +151,11 @@ function BusStop() {
         <ScrollArea className="h-[520px]">
             {/* {userLocation.lat} {userLocation.long} */}
             {/* <br /> */}
-            {nearestBusStopETA.length &&
+            {nearestBusStopETA.length === 0 && (
+                <LoadingWithText text="Loading nearest bus stop..." />
+            )}
+
+            {nearestBusStopETA.length > 0 &&
                 nearestBusStopETA
                     .sort(
                         (a, b) => a.route.charCodeAt(0) - b.route.charCodeAt(0)
