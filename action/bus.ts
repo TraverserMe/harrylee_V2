@@ -4,24 +4,24 @@ import { RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
 import { promises as fs } from "fs";
 
-// export const getAllBusStops = async () => {
-
-//     const res = await fetch(
-//         "https://data.etabus.gov.hk/v1/transport/kmb/stop"
-//     );
-//     // console.log(res.json())
-//     const json = await Promise.resolve(await res.json());
-//     return json.data as StopInfo[];
-
-//     // return json as StopInfo[]
-// };
-
 export const getAllBusStops = async () => {
-    const path = process.cwd() + "/public/busStop.json"
-    const file = await fs.readFile(path, "utf8");
-    const json = JSON.parse(file);
-    return json.data as StopInfo[]
+
+    const res = await fetch(
+        "https://data.etabus.gov.hk/v1/transport/kmb/stop/"
+    );
+    // console.log(res.json())
+    const json = await res.json()
+    return json.data as StopInfo[];
+
+    // return json as StopInfo[]
 };
+
+// export const getAllBusStops = async () => {
+//     const path = process.cwd() + "/public/busStop.json"
+//     const file = await fs.readFile(path, "utf8");
+//     const json = JSON.parse(file);
+//     return json.data as StopInfo[]
+// };
 
 
 export const getNearByBusStops = async ({

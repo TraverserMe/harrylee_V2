@@ -67,7 +67,7 @@ function BusStop() {
 
     return (
         <ScrollArea className="h-[520px]">
-            {userLocation.lat} {userLocation.long}
+            {/* {userLocation.lat} {userLocation.long} */}
             {/* <br /> */}
             {nearestBusStopETA &&
                 nearestBusStopETA
