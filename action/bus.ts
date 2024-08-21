@@ -16,14 +16,6 @@ export const getAllBusStops = async () => {
     // return json as StopInfo[]
 };
 
-// export const getAllBusStops = async () => {
-//     const path = process.cwd() + "/public/busStop.json"
-//     const file = await fs.readFile(path, "utf8");
-//     const json = JSON.parse(file);
-//     return json.data as StopInfo[]
-// };
-
-
 export const getNearByBusStops = async ({
     userLocation,
     range,
