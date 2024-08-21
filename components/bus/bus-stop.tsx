@@ -31,7 +31,7 @@ function BusStop() {
                 },
                 range,
             }).then((res) => {
-                setNearestBusStop(res.busStops);
+                // setNearestBusStop(res.busStops);
                 setNearestBusStopETA(res.busStopETA);
             });
             setUserLocation({
@@ -53,7 +53,7 @@ function BusStop() {
                 },
                 range,
             }).then((res) => {
-                setNearestBusStop(res.busStops);
+                // setNearestBusStop(res.busStops);
                 setNearestBusStopETA(res.busStopETA);
             });
         }, 55000);
@@ -69,7 +69,7 @@ function BusStop() {
         <ScrollArea className="h-[520px]">
             {/* {userLocation.lat} {userLocation.long} */}
             {/* <br /> */}
-            {nearestBusStopETA &&
+            {nearestBusStopETA.length &&
                 nearestBusStopETA
                     .sort(
                         (a, b) => a.route.charCodeAt(0) - b.route.charCodeAt(0)
