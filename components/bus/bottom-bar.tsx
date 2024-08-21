@@ -1,12 +1,34 @@
+"use client";
+import { House, Search, Star } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 function BusBottomBar() {
+    const router = useRouter();
     return (
-        <div className="fixed bottom-0 h-24 w-full">
-            <div className=" mx-2 bg-neutral-900 dark:bg-slate-50 text-white dark:text-neutral-900 transition-all">
-                <ul className="flex justify-around items-center flex-row">
-                    <li>Home</li>
-                    <li>Search</li>
-                </ul>
-            </div>
+        <div className="absolute bottom-0 h-12 mx-auto w-full ">
+            <ul className="flex justify-evenly items-center flex-row text-sm text-rose-600">
+                <li
+                    className="w-full text-center"
+                    onClick={() => router.push("/bus")}
+                >
+                    <House className="mx-auto" />
+                    主頁
+                </li>
+                <li
+                    className="w-full text-center"
+                    onClick={() => router.push("/bus/search")}
+                >
+                    <Search className="mx-auto" />
+                    搜索
+                </li>
+                <li
+                    className="w-full text-center"
+                    onClick={() => router.push("/bus/favorite")}
+                >
+                    <Star className="mx-auto" />
+                    收藏
+                </li>
+            </ul>
         </div>
     );
 }

@@ -44,7 +44,7 @@ const ConsolePage = () => {
                 router.push("/");
             }, 1000);
         }
-    }, [session.data]);
+    }, [router, session.data]);
 
     const onSave = async () => {
         setSaving(true);

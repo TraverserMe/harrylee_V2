@@ -181,6 +181,16 @@ export default function Navbar() {
                                 </ul>
                             </NavigationMenuContent>
                         </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>Bus</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                                    <ListItem title="Bus" href="/bus">
+                                        Check bus estimated time
+                                    </ListItem>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
                     </NavigationMenuList>
                     <div className="flex flex-1 items-center justify-end space-x-4">
                         <ModeToggle />
@@ -257,6 +267,17 @@ export default function Navbar() {
                                             className="underline"
                                         >
                                             Projects
+                                        </Link>
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-3">
+                                    <AccordionTrigger>Bus</AccordionTrigger>
+                                    <AccordionContent className="w-full flex flex-1 flex-col">
+                                        <Link
+                                            href={"/bus"}
+                                            className="underline"
+                                        >
+                                            Bus Estimated Time
                                         </Link>
                                     </AccordionContent>
                                 </AccordionItem>
