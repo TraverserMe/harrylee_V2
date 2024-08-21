@@ -129,7 +129,7 @@ export default function Navbar() {
                                         from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                                             >
                                                 <Image
-                                                    src={"/harry.svg"}
+                                                    src={"/image/harry.svg"}
                                                     alt="logo"
                                                     width={200}
                                                     height={200}
@@ -204,7 +204,12 @@ export default function Navbar() {
     return (
         <nav className="flex flex-1 items-center justify-between px-2 md:hidden z-50 sticky top-0 bg-slate-50 dark:bg-neutral-900">
             <Link href={"/"}>
-                <Image src={"/logo.png"} alt="logo" width={40} height={40} />
+                <Image
+                    src={"/image/logo.png"}
+                    alt="logo"
+                    width={40}
+                    height={40}
+                />
             </Link>
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger>
