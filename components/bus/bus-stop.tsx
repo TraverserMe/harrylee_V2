@@ -34,9 +34,10 @@ function BusStop() {
                 if ("error" in res) {
                     console.log(res.error);
                     return;
+                } else {
+                    setNearestBusStop(res.busStops);
+                    setNearestBusStopETA(res.busStopETA);
                 }
-                setNearestBusStop(res.busStops);
-                setNearestBusStopETA(res.busStopETA);
             });
             setUserLocation({
                 lat: position.coords.latitude,
@@ -72,7 +73,7 @@ function BusStop() {
 
     return (
         <ScrollArea className="h-[520px]">
-            {/* {userLocation.lat} {userLocation.long} */}
+            {userLocation.lat} {userLocation.long}
             {/* <br /> */}
             {nearestBusStopETA &&
                 nearestBusStopETA
