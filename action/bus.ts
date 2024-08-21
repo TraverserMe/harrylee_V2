@@ -2,7 +2,6 @@
 
 import { RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
-import { promises as fs } from "fs";
 
 export const getAllBusStops = async () => {
 
