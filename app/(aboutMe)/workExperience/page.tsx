@@ -16,7 +16,7 @@ function WorkExperiencePage() {
                             target="_blank"
                         >
                             <Image
-                                src={"pegasus.svg"}
+                                src={"/image/pegasus.svg"}
                                 alt={"pegasus logo"}
                                 width={100}
                                 height={30}
@@ -50,7 +50,7 @@ function WorkExperiencePage() {
                             target="_blank"
                         >
                             <Image
-                                src={"/RoboCode.png"}
+                                src={"/image/RoboCode.png"}
                                 alt={"RoboCode logo"}
                                 width={100}
                                 height={30}
@@ -85,7 +85,7 @@ function WorkExperiencePage() {
                             target="_blank"
                         >
                             <Image
-                                src={"pegasus.svg"}
+                                src={"/image/pegasus.svg"}
                                 alt={"pegasus logo"}
                                 width={100}
                                 height={30}

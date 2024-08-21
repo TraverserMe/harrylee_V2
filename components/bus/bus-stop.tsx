@@ -3,7 +3,7 @@
 import { getNearByBusStops } from "@/action/bus";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { StopETA, StopInfo } from "@/schemas/bus";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import BusRow from "@/components/bus/bus-page-row";
 
 function BusStop() {
@@ -17,7 +17,7 @@ function BusStop() {
     const [nearestBusStop, setNearestBusStop] = useState<StopInfo[]>([]);
     const [nearestBusStopETA, setNearestBusStopETA] = useState<StopETA[]>([]);
 
-    const range = 40; //meters
+    const range = 2000; //meters
 
     useEffect(() => {
         if (!navigator.geolocation) {
@@ -31,10 +31,6 @@ function BusStop() {
                 },
                 range,
             }).then((res) => {
-                if ("error" in res) {
-                    // console.log(res.error);
-                    return;
-                }
                 setNearestBusStop(res.busStops);
                 setNearestBusStopETA(res.busStopETA);
             });
@@ -42,33 +38,32 @@ function BusStop() {
                 lat: position.coords.latitude,
                 long: position.coords.longitude,
             });
+        });
+    }, []);
+
+    useEffect(() => {
+        if (interval.current) {
+            clearInterval(interval.current);
+        }
+        interval.current = setInterval(() => {
+            getNearByBusStops({
+                userLocation: {
+                    lat: userLocation.lat,
+                    long: userLocation.long,
+                },
+                range,
+            }).then((res) => {
+                setNearestBusStop(res.busStops);
+                setNearestBusStopETA(res.busStopETA);
+            });
+        }, 55000);
+
+        return () => {
             if (interval.current) {
                 clearInterval(interval.current);
             }
-            interval.current = setInterval(() => {
-                getNearByBusStops({
-                    userLocation: {
-                        lat: position.coords.latitude,
-                        long: position.coords.longitude,
-                    },
-                    range,
-                }).then((res) => {
-                    if ("error" in res) {
-                        // console.log(res.error);
-                        return;
-                    }
-                    setNearestBusStop(res.busStops);
-                    setNearestBusStopETA(res.busStopETA);
-                });
-            }, 55000);
-
-            return () => {
-                if (interval.current) {
-                    clearInterval(interval.current);
-                }
-            };
-        });
-    }, []);
+        };
+    }, [userLocation]);
 
     return (
         <ScrollArea className="h-[520px]">

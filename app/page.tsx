@@ -24,7 +24,7 @@ export default function Home() {
                 <AnimatedTitle text="Hello! Nice to meet you." />
                 <div className="flex flex-col space-y-2 md:space-x-4 text-center">
                     <Image
-                        src={"/boy-coding.jpeg"}
+                        src={"/image/boy-coding.jpeg"}
                         alt="boy coding"
                         width={400}
                         height={400}
