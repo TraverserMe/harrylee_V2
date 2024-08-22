@@ -150,7 +150,7 @@ function BusRoutePage() {
                                                         )}
                                                     </span>{" "}
                                                     <span>分鐘</span>
-                                                    <span className="text-sm text-slate-500">
+                                                    <span className="text-sm text-slate-500 ml-4">
                                                         {eta.rmk_tc}
                                                     </span>
                                                 </span>
