@@ -34,3 +34,14 @@ export type RouteETA = {
     routeInfo: RouteStopInfo
     stopInfo: StopInfo
 }
+
+export type Route = {
+    co: "KMB" | "CTB" | "MB"
+    route: string
+    orig_tc: string
+    orig_en: string
+    dest_tc: string
+    dest_en: string
+    bound?: string
+    service_type?: string
+}
