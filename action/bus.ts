@@ -1,6 +1,6 @@
 "use server";
 
-import { RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
+import { Route, RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
 
 export const getAllBusStops = async () => {
@@ -97,11 +97,11 @@ export const getNearByBusStops = async ({
 };
 
 export const getAllRoutes = async () => {
-    const res = await fetch(
+    const kmbRes = await fetch(
         "https://data.etabus.gov.hk/v1/transport/kmb/route"
     );
-    const json = await res.json();
-    return json.data as RouteStopInfo[];
+    const json = await kmbRes.json();
+    return json.data as Route[];
 };
 
 export const getRouteETA = async (route: string, dir: string, serviceType: string) => {
