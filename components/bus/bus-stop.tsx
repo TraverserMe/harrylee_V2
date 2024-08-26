@@ -1,6 +1,10 @@
 "use client";
 
-import { getAllBusStops, getNearByBusStops } from "@/action/bus";
+import {
+    getAllBusStops,
+    getNearBusStopETA,
+    getNearByBusStops,
+} from "@/action/bus";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { StopETA, StopInfo } from "@/schemas/bus";
 import { useEffect, useRef, useState } from "react";
@@ -103,25 +107,35 @@ function BusStop() {
     const range = 500; //meters
 
     useEffect(() => {
-        if (!navigator.geolocation) {
-            return;
-        }
-        navigator.geolocation.getCurrentPosition((position) => {
-            getData({
-                userLocation: {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setUserLocation({
                     lat: position.coords.latitude,
                     long: position.coords.longitude,
+                });
+                getData({
+                    userLocation: {
+                        lat: position.coords.latitude,
+                        long: position.coords.longitude,
+                    },
+                    range,
+                }).then((res) => {
+                    setNearestBusStop(res.busStops);
+                    setNearestBusStopETA(res.busStopETA);
+                });
+            });
+        } else {
+            getData({
+                userLocation: {
+                    lat: userLocation.lat,
+                    long: userLocation.long,
                 },
                 range,
             }).then((res) => {
-                // setNearestBusStop(res.busStops);
+                setNearestBusStop(res.busStops);
                 setNearestBusStopETA(res.busStopETA);
             });
-            setUserLocation({
-                lat: position.coords.latitude,
-                long: position.coords.longitude,
-            });
-        });
+        }
     }, []);
 
     useEffect(() => {
@@ -129,15 +143,8 @@ function BusStop() {
             clearInterval(interval.current);
         }
         interval.current = setInterval(() => {
-            getNearByBusStops({
-                userLocation: {
-                    lat: userLocation.lat,
-                    long: userLocation.long,
-                },
-                range,
-            }).then((res) => {
-                // setNearestBusStop(res.busStops);
-                setNearestBusStopETA(res.busStopETA);
+            getNearBusStopETA(nearestBusStop).then((res) => {
+                setNearestBusStopETA(res);
             });
         }, 55000);
 
@@ -146,7 +153,7 @@ function BusStop() {
                 clearInterval(interval.current);
             }
         };
-    }, [userLocation]);
+    }, [nearestBusStop]);
 
     return (
         <ScrollArea className="h-[calc(100vh-200px)] max-h-[700px]">
