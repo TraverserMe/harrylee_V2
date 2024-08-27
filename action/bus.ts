@@ -1,6 +1,6 @@
 "use server";
 
-import { Route, RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
+import { MiniBusRouteInfo, Route, RouteETA, KMBRouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { calculateDistance } from "@/utils/bus";
 
 export const getAllBusStops = async () => {
@@ -104,7 +104,7 @@ export const getRouteETA = async (route: string, dir: string, serviceType: strin
     const res = await fetch("https://data.etabus.gov.hk/v1/transport/kmb/route-stop/" + route + "/" + dir + "/" + serviceType);
     const json = await res.json()
 
-    const busRouteStops = json.data as RouteStopInfo[]
+    const busRouteStops = json.data as KMBRouteStopInfo[]
 
     for (let i = 0; i < busRouteStops.length; i++) {
 
@@ -177,6 +177,115 @@ export const getNearBusStopETA = async (stops: StopInfo[]) => {
     return nearestBusStopETA
 }
 
+export const getMinimumBusRoute = async () => {
+    const mbRes = await fetch("https://data.etagmb.gov.hk/route/");
+
+    const mbJson = await mbRes.json();
+    const mbAllRoutes = mbJson.data as {
+        routes: {
+            HKI: string[];
+            NT: string[];
+            KLN: string[];
+        };
+    };
+    const mbRoutes = mbAllRoutes.routes;
+    // let mbRouteInfo = [] as MiniBusRouteInfo[];
+    let mbRoute = [] as Route[];
+
+    for (let i = 0; i < mbRoutes.HKI.length; i++) {
+        const res = await fetch(
+            "https://data.etagmb.gov.hk/route/HKI/" + mbRoutes.HKI[i]
+        );
+        const routeJson = await res.json();
+        const routeInfo = routeJson.data[0] as MiniBusRouteInfo;
+
+        for (let j = 0; j < routeInfo.directions.length; j++) {
+            mbRoute.push({
+                co: "MB",
+                route: routeInfo.route_code,
+                orig_tc: routeInfo.directions[j].orig_tc,
+                orig_en: routeInfo.directions[j].orig_en,
+                dest_tc: routeInfo.directions[j].dest_tc,
+                dest_en: routeInfo.directions[j].dest_en,
+                route_id: routeInfo.route_id,
+            });
+        }
+    }
+
+    for (let i = 0; i < mbRoutes.NT.length; i++) {
+        const res = await fetch(
+            "https://data.etagmb.gov.hk/route/NT/" + mbRoutes.NT[i]
+        );
+        const routeJson = await res.json();
+        const routeInfo = routeJson.data[0] as MiniBusRouteInfo;
+
+        for (let j = 0; j < routeInfo.directions.length; j++) {
+            mbRoute.push({
+                co: "MB",
+                route: routeInfo.route_code,
+                orig_tc: routeInfo.directions[j].orig_tc,
+                orig_en: routeInfo.directions[j].orig_en,
+                dest_tc: routeInfo.directions[j].dest_tc,
+                dest_en: routeInfo.directions[j].dest_en,
+                route_id: routeInfo.route_id,
+            });
+        }
+    }
+
+    for (let i = 0; i < mbRoutes.KLN.length; i++) {
+        const res = await fetch(
+            "https://data.etagmb.gov.hk/route/KLN/" + mbRoutes.KLN[i]
+        );
+        const routeJson = await res.json();
+        const routeInfo = routeJson.data[0] as MiniBusRouteInfo;
+
+        for (let j = 0; j < routeInfo.directions.length; j++) {
+            mbRoute.push({
+                co: "MB",
+                route: routeInfo.route_code,
+                orig_tc: routeInfo.directions[j].orig_tc,
+                orig_en: routeInfo.directions[j].orig_en,
+                dest_tc: routeInfo.directions[j].dest_tc,
+                dest_en: routeInfo.directions[j].dest_en,
+                route_id: routeInfo.route_id,
+            });
+        }
+    }
+    return mbRoute;
+}
+
+export const getAllKMBRoutes = async () => {
+    const res = await fetch(
+        "https://data.etabus.gov.hk/v1/transport/kmb/route/"
+    );
+    const json = await res.json()
+
+    const kmbRoutes = json.data as {
+        route: string
+        orig_tc: string
+        orig_en: string
+        dest_tc: string
+        dest_en: string
+        service_type: string
+        bound: string
+    }[];
+
+    return kmbRoutes.map((route) => {
+        return {
+            co: "KMB",
+            route: route.route,
+            orig_tc: route.orig_tc,
+            orig_en: route.orig_en,
+            dest_tc: route.dest_tc,
+            dest_en: route.dest_en,
+            service_type: route.service_type,
+            bound: route.bound
+        } as Route
+    }).filter((route) => route.service_type !== "2")
+}
+
+
+
 export const getAllRoutes = async () => {
     const kmbRes = await fetch(
         "https://data.etabus.gov.hk/v1/transport/kmb/route"
@@ -193,7 +302,6 @@ export const getAllRoutes = async () => {
     const ctbJson = await ctbRes.json();
     const ctbRoutes = ctbJson.data as Route[];
 
-    const mbRes = await fetch("https://data.etagmb.gov.hk/route/")
-
-    return true
+    const mbRes = await getMinimumBusRoute();
+    return kmbRoutes.concat(ctbRoutes).concat(mbRes);
 };  

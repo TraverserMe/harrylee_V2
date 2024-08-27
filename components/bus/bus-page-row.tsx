@@ -15,7 +15,7 @@ function BusRow({
 }) {
     return (
         <div className="flex items-center flex-row text-center border-b-2">
-            <div className="w-1/6 font-extrabold text-2xl">{busRoute}</div>
+            <div className="w-1/6 font-extrabold text-2xl mr-1">{busRoute}</div>
             <div className="flex-1 flex flex-col h-16 text-start justify-center">
                 <span>
                     <span className="text-sm">往</span>

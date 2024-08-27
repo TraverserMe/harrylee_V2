@@ -8,7 +8,7 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { RouteETA, RouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
+import { RouteETA, KMBRouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -25,7 +25,7 @@ async function getData(route: string, dir: string, serviceType: string) {
     );
     const json = await res.json();
 
-    const busRouteStops = json.data as RouteStopInfo[];
+    const busRouteStops = json.data as KMBRouteStopInfo[];
 
     for (let i = 0; i < busRouteStops.length; i++) {
         const res = await fetch(
