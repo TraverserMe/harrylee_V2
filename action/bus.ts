@@ -192,5 +192,8 @@ export const getAllRoutes = async () => {
     );
     const ctbJson = await ctbRes.json();
     const ctbRoutes = ctbJson.data as Route[];
+
+    const mbRes = await fetch("https://data.etagmb.gov.hk/route/")
+
     return true
 };  
