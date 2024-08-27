@@ -50,11 +50,15 @@ async function getData(route: string, dir: string, serviceType: string) {
             routeInfo: busRouteStops[i],
             stopETA: stopETA.filter(
                 (eta) =>
-                    eta.route === route && eta.dir === busRouteStops[i].bound
+                    eta.route === route &&
+                    eta.dir === busRouteStops[i].bound &&
+                    eta.service_type == busRouteStops[i].service_type
             ),
             stopInfo: stopInfo,
         });
     }
+
+    console.log(busStopETA);
 
     return busStopETA;
 }
@@ -81,7 +85,6 @@ function BusRoutePage() {
     useEffect(() => {
         getData(route, dir, serviceType).then((routeInfo) => {
             setRouteInfo(routeInfo);
-            console.log(routeInfo);
         });
     }, [route, dir, serviceType]);
 
