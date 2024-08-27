@@ -46,49 +46,47 @@ async function getData({
         nearByBusStops = allBusStops.slice(0, 50);
     }
 
-    nearestBusStopETA = await getNearBusStopETA(nearByBusStops);
+    for (let i = 0; i < nearByBusStops.length; i++) {
+        const res = await fetch(
+            "https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" +
+                nearByBusStops[i].stop,
+            {
+                cache: "no-cache",
+            }
+        );
+        const json = await res.json();
 
-    // for (let i = 0; i < nearByBusStops.length; i++) {
-    //     const res = await fetch(
-    //         "https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" +
-    //             nearByBusStops[i].stop,
-    //         {
-    //             cache: "no-cache",
-    //         }
-    //     );
-    //     const json = await res.json();
+        const busStopETA = json.data as {
+            co: "KMB";
+            route: string;
+            dir: string;
+            service_type: string;
+            seq: number;
+            dest_tc: string;
+            dest_en: string;
+            eta_seq: number;
+            eta: string;
+            rmk_tc: string;
+            rmk_en: string;
+        }[];
+        // just take the first one of each route
 
-    //     const busStopETA = json.data as {
-    //         co: "KMB";
-    //         route: string;
-    //         dir: string;
-    //         service_type: string;
-    //         seq: number;
-    //         dest_tc: string;
-    //         dest_en: string;
-    //         eta_seq: number;
-    //         eta: string;
-    //         rmk_tc: string;
-    //         rmk_en: string;
-    //     }[];
-    //     // just take the first one of each route
-
-    //     busStopETA.map((stopETA) => {
-    //         if (
-    //             stopETA.eta_seq === 1 &&
-    //             //not already in the list and not the same direction
-    //             nearestBusStopETA.findIndex(
-    //                 (x) => x.route === stopETA.route && x.dir === stopETA.dir
-    //             ) === -1 &&
-    //             stopETA.eta
-    //         ) {
-    //             nearestBusStopETA.push({
-    //                 stop: nearByBusStops[i],
-    //                 ...stopETA,
-    //             });
-    //         }
-    //     });
-    // }
+        busStopETA.map((stopETA) => {
+            if (
+                stopETA.eta_seq === 1 &&
+                //not already in the list and not the same direction
+                nearestBusStopETA.findIndex(
+                    (x) => x.route === stopETA.route && x.dir === stopETA.dir
+                ) === -1 &&
+                stopETA.eta
+            ) {
+                nearestBusStopETA.push({
+                    stop: nearByBusStops[i],
+                    ...stopETA,
+                });
+            }
+        });
+    }
 
     return {
         busStops: nearByBusStops,

@@ -96,13 +96,7 @@ export const getNearByBusStops = async ({
     };
 };
 
-export const getAllRoutes = async () => {
-    const kmbRes = await fetch(
-        "https://data.etabus.gov.hk/v1/transport/kmb/route"
-    );
-    const json = await kmbRes.json();
-    return json.data as Route[];
-};
+
 
 export const getRouteETA = async (route: string, dir: string, serviceType: string) => {
 
@@ -182,3 +176,21 @@ export const getNearBusStopETA = async (stops: StopInfo[]) => {
 
     return nearestBusStopETA
 }
+
+export const getAllRoutes = async () => {
+    const kmbRes = await fetch(
+        "https://data.etabus.gov.hk/v1/transport/kmb/route"
+    );
+    const json = await kmbRes.json();
+    const kmbRoutes = {
+        co: "KMB",
+        ...json.data,
+    } as Route[];
+
+    const ctbRes = await fetch(
+        "https://rt.data.gov.hk/v2/transport/citybus/route/ctb"
+    );
+    const ctbJson = await ctbRes.json();
+    const ctbRoutes = ctbJson.data as Route[];
+    return true
+};  
