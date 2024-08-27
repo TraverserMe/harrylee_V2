@@ -141,14 +141,9 @@ function BusSearchPage() {
 
     useEffect(() => {
         getData().then((routes) => {
-            console.log(routes.length);
             setRoutes(routes);
         });
     }, []);
-
-    useEffect(() => {
-        console.log(nextLetter);
-    }, [searchRoute]);
 
     return (
         <>

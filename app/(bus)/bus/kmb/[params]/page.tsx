@@ -12,6 +12,7 @@ import { RouteETA, KMBRouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { calculateDistance } from "@/utils/bus";
 
 async function getData(route: string, dir: string, serviceType: string) {
     let busStopETA = [] as RouteETA[];
@@ -57,10 +58,26 @@ async function getData(route: string, dir: string, serviceType: string) {
             stopInfo: stopInfo,
         });
     }
-
-    console.log(busStopETA);
-
     return busStopETA;
+}
+
+function getClosestStop(
+    busStopETA: RouteETA[],
+    userLocation: { lat: number; long: number }
+) {
+    return busStopETA
+        .map((stop) => {
+            return {
+                distance: calculateDistance(
+                    stop.stopInfo.lat,
+                    stop.stopInfo.long,
+                    userLocation.lat,
+                    userLocation.long
+                ),
+                stop: stop,
+            };
+        })
+        .sort((a, b) => a.distance - b.distance)[0].stop.routeInfo.seq;
 }
 
 function BusRoutePage() {
@@ -72,15 +89,46 @@ function BusRoutePage() {
     const route = pathname?.split("&")[0];
     const dir = pathname?.split("&")[1] === "I" ? "inbound" : "outbound";
     const serviceType = pathname?.split("&")[2];
-    const closestStop =
-        parseInt(pathname?.split("&")[3]) - 1 > 0
-            ? parseInt(pathname?.split("&")[3]) - 1
-            : 0;
 
+    const [locationPermission, setLocationPermission] = useState(true);
     const interval = useRef<NodeJS.Timeout | null>(null);
-    const [openedStop, setOpenedStop] = useState<Number>(Number(closestStop));
+    const [openedStop, setOpenedStop] = useState(0);
 
     const [routeInfo, setRouteInfo] = useState<RouteETA[]>();
+
+    function _onGetCurrentLocation() {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                setUserLocation({
+                    lat: position.coords.latitude,
+                    long: position.coords.longitude,
+                });
+                setLocationPermission(true);
+                const index = routeInfo
+                    ? getClosestStop(routeInfo, {
+                          lat: position.coords.latitude,
+                          long: position.coords.longitude,
+                      })
+                    : 0;
+                setOpenedStop(Number(index) - 1);
+                const element = document.getElementById("stop-" + index);
+                element?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "nearest",
+                });
+            },
+            function (error) {
+                //error handler here
+            },
+            options
+        );
+    }
 
     useEffect(() => {
         getData(route, dir, serviceType).then((routeInfo) => {
@@ -105,6 +153,26 @@ function BusRoutePage() {
         };
     }, []);
 
+    useEffect(() => {
+        if (navigator.permissions && navigator.permissions.query) {
+            //try permissions APIs first
+            navigator.permissions
+                .query({ name: "geolocation" })
+                .then(function (result) {
+                    // Will return ['granted', 'prompt', 'denied']
+                    const permission = result.state;
+                    if (permission === "granted" || permission === "prompt") {
+                        _onGetCurrentLocation();
+                    } else {
+                        setLocationPermission(false);
+                    }
+                });
+        } else if (navigator.geolocation) {
+            //then Navigation APIs
+            _onGetCurrentLocation();
+        }
+    }, [locationPermission, routeInfo]);
+
     return (
         <>
             <div className="min-h-[230px] border-2">
@@ -117,6 +185,7 @@ function BusRoutePage() {
                             key={stop.routeInfo.seq}
                             className="border-b border-slate-400 "
                             open={index === openedStop}
+                            id={`stop-${index + 1}`}
                         >
                             <CollapsibleTrigger
                                 className="relative flex flex-row w-full items-center p-2"

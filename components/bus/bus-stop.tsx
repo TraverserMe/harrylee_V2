@@ -204,14 +204,12 @@ function BusStop() {
                         <div key={index}>
                             <Link
                                 href={
-                                    "/bus/id/" +
+                                    "/bus/kmb/" +
                                     stop.route +
                                     "&" +
                                     stop.dir +
                                     "&" +
-                                    stop.service_type +
-                                    "&" +
-                                    stop.seq
+                                    stop.service_type
                                 }
                             >
                                 <BusRow
