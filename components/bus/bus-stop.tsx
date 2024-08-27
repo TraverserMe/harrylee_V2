@@ -12,6 +12,7 @@ import BusRow from "@/components/bus/bus-page-row";
 import { calculateDistance } from "@/utils/bus";
 import LoadingWithText from "../loading-with-text";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 async function getData({
     userLocation,
@@ -42,50 +43,52 @@ async function getData({
     }
 
     if (!nearByBusStops.length) {
-        nearByBusStops = allBusStops.slice(0, 30);
+        nearByBusStops = allBusStops.slice(0, 50);
     }
 
-    for (let i = 0; i < nearByBusStops.length; i++) {
-        const res = await fetch(
-            "https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" +
-                nearByBusStops[i].stop,
-            {
-                cache: "no-cache",
-            }
-        );
-        const json = await res.json();
+    nearestBusStopETA = await getNearBusStopETA(nearByBusStops);
 
-        const busStopETA = json.data as {
-            co: "KMB";
-            route: string;
-            dir: string;
-            service_type: string;
-            seq: number;
-            dest_tc: string;
-            dest_en: string;
-            eta_seq: number;
-            eta: string;
-            rmk_tc: string;
-            rmk_en: string;
-        }[];
-        // just take the first one of each route
+    // for (let i = 0; i < nearByBusStops.length; i++) {
+    //     const res = await fetch(
+    //         "https://data.etabus.gov.hk/v1/transport/kmb/stop-eta/" +
+    //             nearByBusStops[i].stop,
+    //         {
+    //             cache: "no-cache",
+    //         }
+    //     );
+    //     const json = await res.json();
 
-        busStopETA.map((stopETA) => {
-            if (
-                stopETA.eta_seq === 1 &&
-                //not already in the list and not the same direction
-                nearestBusStopETA.findIndex(
-                    (x) => x.route === stopETA.route && x.dir === stopETA.dir
-                ) === -1 &&
-                stopETA.eta
-            ) {
-                nearestBusStopETA.push({
-                    stop: nearByBusStops[i],
-                    ...stopETA,
-                });
-            }
-        });
-    }
+    //     const busStopETA = json.data as {
+    //         co: "KMB";
+    //         route: string;
+    //         dir: string;
+    //         service_type: string;
+    //         seq: number;
+    //         dest_tc: string;
+    //         dest_en: string;
+    //         eta_seq: number;
+    //         eta: string;
+    //         rmk_tc: string;
+    //         rmk_en: string;
+    //     }[];
+    //     // just take the first one of each route
+
+    //     busStopETA.map((stopETA) => {
+    //         if (
+    //             stopETA.eta_seq === 1 &&
+    //             //not already in the list and not the same direction
+    //             nearestBusStopETA.findIndex(
+    //                 (x) => x.route === stopETA.route && x.dir === stopETA.dir
+    //             ) === -1 &&
+    //             stopETA.eta
+    //         ) {
+    //             nearestBusStopETA.push({
+    //                 stop: nearByBusStops[i],
+    //                 ...stopETA,
+    //             });
+    //         }
+    //     });
+    // }
 
     return {
         busStops: nearByBusStops,
@@ -99,6 +102,8 @@ function BusStop() {
         long: 114.177216,
     });
 
+    const [locationPermission, setLocationPermission] = useState(true);
+
     const interval = useRef<NodeJS.Timeout | null>(null);
 
     const [nearestBusStop, setNearestBusStop] = useState<StopInfo[]>([]);
@@ -106,13 +111,19 @@ function BusStop() {
 
     const range = 500; //meters
 
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
+    function _onGetCurrentLocation() {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+        };
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
                 setUserLocation({
                     lat: position.coords.latitude,
                     long: position.coords.longitude,
                 });
+                setLocationPermission(true);
                 getData({
                     userLocation: {
                         lat: position.coords.latitude,
@@ -123,20 +134,43 @@ function BusStop() {
                     setNearestBusStop(res.busStops);
                     setNearestBusStopETA(res.busStopETA);
                 });
-            });
-        } else {
-            getData({
-                userLocation: {
-                    lat: userLocation.lat,
-                    long: userLocation.long,
-                },
-                range,
-            }).then((res) => {
-                setNearestBusStop(res.busStops);
-                setNearestBusStopETA(res.busStopETA);
-            });
+            },
+            function (error) {
+                //error handler here
+            },
+            options
+        );
+    }
+
+    useEffect(() => {
+        if (navigator.permissions && navigator.permissions.query) {
+            //try permissions APIs first
+            navigator.permissions
+                .query({ name: "geolocation" })
+                .then(function (result) {
+                    // Will return ['granted', 'prompt', 'denied']
+                    const permission = result.state;
+                    if (permission === "granted" || permission === "prompt") {
+                        _onGetCurrentLocation();
+                    } else {
+                        setLocationPermission(false);
+                        getData({
+                            userLocation: {
+                                lat: userLocation.lat,
+                                long: userLocation.long,
+                            },
+                            range,
+                        }).then((res) => {
+                            setNearestBusStop(res.busStops);
+                            setNearestBusStopETA(res.busStopETA);
+                        });
+                    }
+                });
+        } else if (navigator.geolocation) {
+            //then Navigation APIs
+            _onGetCurrentLocation();
         }
-    }, []);
+    }, [locationPermission]);
 
     useEffect(() => {
         if (interval.current) {
@@ -192,6 +226,14 @@ function BusStop() {
                             </Link>
                         </div>
                     ))}
+            {!locationPermission && (
+                <Button
+                    className="absolute bottom-2 right-10 w-[120px]"
+                    onClick={_onGetCurrentLocation}
+                >
+                    Get my location
+                </Button>
+            )}
         </ScrollArea>
     );
 }
