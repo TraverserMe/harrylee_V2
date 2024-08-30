@@ -160,21 +160,25 @@ function BusRoutePage() {
                     long: position.coords.longitude,
                 });
                 setLocationPermission(true);
-                const index = routeInfo
-                    ? getClosestStop(routeInfo, {
-                          lat: position.coords.latitude,
-                          long: position.coords.longitude,
-                      })
-                    : 0;
-                if (index !== 0 && counterForOneTime === 0) {
-                    setOpenedStop(Number(index) - 1);
-                    const element = document.getElementById("stop-" + index);
-                    element?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                        inline: "nearest",
-                    });
-                    setCounterForOneTime(counterForOneTime + 1);
+                if (routeInfo && routeInfo.length > 0) {
+                    const index = routeInfo
+                        ? getClosestStop(routeInfo, {
+                              lat: position.coords.latitude,
+                              long: position.coords.longitude,
+                          })
+                        : 0;
+                    if (counterForOneTime === 0) {
+                        setOpenedStop(Number(index) - 1);
+                        const element = document.getElementById(
+                            "stop-" + index
+                        );
+                        element?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                            inline: "nearest",
+                        });
+                        setCounterForOneTime(counterForOneTime + 1);
+                    }
                 }
             },
             function (error) {
