@@ -204,7 +204,7 @@ function BusStop() {
                         <div key={index}>
                             <Link
                                 href={
-                                    "/bus/kmb/" +
+                                    "/bus/route/kmb&" +
                                     stop.route +
                                     "&" +
                                     stop.dir +

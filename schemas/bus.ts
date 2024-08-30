@@ -14,9 +14,17 @@ export type KMBRouteStopInfo = {
     stop: string;
 }
 
+export type CTBRouteStopInfo = {
+    co: "CTB",
+    route: string,
+    dir: string,
+    stop: string
+    seq: number
+}
+
 export type StopETA = {
     stop: StopInfo,
-    co: "KMB",
+    co: "KMB" | "CTB" | "MB",
     route: string,
     dir: string,
     service_type: string,
@@ -28,10 +36,9 @@ export type StopETA = {
     rmk_tc: string,
     rmk_en: string
 }
-
 export type RouteETA = {
     stopETA: StopETA[],
-    routeInfo: KMBRouteStopInfo
+    routeInfo: KMBRouteStopInfo | CTBRouteStopInfo,
     stopInfo: StopInfo
 }
 

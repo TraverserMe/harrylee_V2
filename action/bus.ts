@@ -304,4 +304,8 @@ export const getAllRoutes = async () => {
 
     const mbRes = await getMinimumBusRoute();
     return kmbRoutes.concat(ctbRoutes).concat(mbRes);
-};  
+};
+
+export const getCTBRouteStops = async (route: string, dir: string) => {
+
+}

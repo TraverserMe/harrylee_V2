@@ -95,10 +95,35 @@ const getData = async () => {
         "https://rt.data.gov.hk/v2/transport/citybus/route/ctb"
     );
     const ctbJson = await ctbRes.json();
-    const ctbRoutes = ctbJson.data as Route[];
+    const tempCTBRoutes = ctbJson.data as Route[];
+    const ctbRoutes = tempCTBRoutes.map((route) => {
+        return {
+            co: "CTB",
+            route: route.route,
+            route_id: route.route_id,
+            orig_tc: route.dest_tc,
+            orig_en: route.dest_en,
+            dest_tc: route.orig_tc,
+            dest_en: route.orig_en,
+            bound: "I",
+        } as Route;
+    });
+
+    const revertCtbRoutes = tempCTBRoutes.map((route) => {
+        return {
+            co: "CTB",
+            route: route.route,
+            route_id: route.route_id,
+            orig_tc: route.dest_tc,
+            orig_en: route.dest_en,
+            dest_tc: route.orig_tc,
+            dest_en: route.orig_en,
+            bound: "o",
+        };
+    }) as Route[];
 
     const mbRes = miniBusRoute as Route[];
-    return [...kmbRoutes, ...ctbRoutes, ...mbRes];
+    return [...kmbRoutes, ...ctbRoutes, ...revertCtbRoutes, ...mbRes];
 };
 
 function BusSearchPage() {
@@ -115,6 +140,9 @@ function BusSearchPage() {
         new Set(
             filteredRoutes
                 .map((route) => {
+                    if (route.route.length === searchRoute.length) {
+                        return undefined;
+                    }
                     return route.route
                         .slice(0, searchRoute.length + 1)
                         .slice(-1);

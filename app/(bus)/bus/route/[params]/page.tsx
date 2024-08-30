@@ -8,13 +8,19 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { RouteETA, KMBRouteStopInfo, StopETA, StopInfo } from "@/schemas/bus";
+import {
+    RouteETA,
+    KMBRouteStopInfo,
+    StopETA,
+    StopInfo,
+    CTBRouteStopInfo,
+} from "@/schemas/bus";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { calculateDistance } from "@/utils/bus";
 
-async function getData(route: string, dir: string, serviceType: string) {
+async function getKMBData(route: string, dir: string, serviceType: string) {
     let busStopETA = [] as RouteETA[];
     const res = await fetch(
         "https://data.etabus.gov.hk/v1/transport/kmb/route-stop/" +
@@ -61,6 +67,49 @@ async function getData(route: string, dir: string, serviceType: string) {
     return busStopETA;
 }
 
+async function getCTBData(route: string, dir: string) {
+    let busStopETA = [] as RouteETA[];
+    const res = await fetch(
+        "https://rt.data.gov.hk/v2/transport/citybus/route-stop/CTB/" +
+            route +
+            "/" +
+            dir
+    );
+    const json = await res.json();
+    const busRouteStops = json.data as CTBRouteStopInfo[];
+
+    for (let i = 0; i < busRouteStops.length; i++) {
+        const stopRes = await fetch(
+            "https://rt.data.gov.hk/v2/transport/citybus/stop/" +
+                busRouteStops[i].stop
+        );
+        const stopJson = await stopRes.json();
+        const stopInfo = stopJson.data as StopInfo;
+        const res = await fetch(
+            "https://rt.data.gov.hk/v2/transport/citybus/eta/CTB/" +
+                busRouteStops[i].stop +
+                "/" +
+                busRouteStops[i].route,
+            {
+                cache: "no-cache",
+            }
+        );
+
+        const json = await res.json();
+        const stopETA = json.data as StopETA[];
+
+        busStopETA.push({
+            routeInfo: busRouteStops[i],
+            stopETA: stopETA.filter(
+                (eta) => eta.route === route && eta.dir === busRouteStops[i].dir
+            ),
+            stopInfo: stopInfo,
+        });
+    }
+
+    return busStopETA;
+}
+
 function getClosestStop(
     busStopETA: RouteETA[],
     userLocation: { lat: number; long: number }
@@ -85,15 +134,17 @@ function BusRoutePage() {
         lat: 22.302711,
         long: 114.177216,
     });
+
+    const [counterForOneTime, setCounterForOneTime] = useState(0);
     const pathname = usePathname().split("/")[3];
-    const route = pathname?.split("&")[0];
-    const dir = pathname?.split("&")[1] === "I" ? "inbound" : "outbound";
-    const serviceType = pathname?.split("&")[2];
+    const type = pathname?.split("&")[0];
+    const route = pathname?.split("&")[1];
+    const dir = pathname?.split("&")[2] === "I" ? "inbound" : "outbound";
+    const serviceType = pathname?.split("&")[3];
 
     const [locationPermission, setLocationPermission] = useState(true);
     const interval = useRef<NodeJS.Timeout | null>(null);
     const [openedStop, setOpenedStop] = useState(0);
-
     const [routeInfo, setRouteInfo] = useState<RouteETA[]>();
 
     function _onGetCurrentLocation() {
@@ -115,13 +166,16 @@ function BusRoutePage() {
                           long: position.coords.longitude,
                       })
                     : 0;
-                setOpenedStop(Number(index) - 1);
-                const element = document.getElementById("stop-" + index);
-                element?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                    inline: "nearest",
-                });
+                if (index !== 0 && counterForOneTime === 0) {
+                    setOpenedStop(Number(index) - 1);
+                    const element = document.getElementById("stop-" + index);
+                    element?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                        inline: "nearest",
+                    });
+                    setCounterForOneTime(counterForOneTime + 1);
+                }
             },
             function (error) {
                 //error handler here
@@ -131,9 +185,15 @@ function BusRoutePage() {
     }
 
     useEffect(() => {
-        getData(route, dir, serviceType).then((routeInfo) => {
-            setRouteInfo(routeInfo);
-        });
+        if (type === "kmb") {
+            getKMBData(route, dir, serviceType).then((routeInfo) => {
+                setRouteInfo(routeInfo);
+            });
+        } else if (type === "ctb") {
+            getCTBData(route, dir).then((routeInfo) => {
+                setRouteInfo(routeInfo);
+            });
+        }
     }, [route, dir, serviceType]);
 
     useEffect(() => {
@@ -141,9 +201,17 @@ function BusRoutePage() {
             clearInterval(interval.current);
         }
         interval.current = setInterval(() => {
-            getData(route, dir, serviceType).then((routeInfo) => {
-                setRouteInfo(routeInfo);
-            });
+            if (type === "kmb") {
+                getKMBData(route, dir, serviceType).then((routeInfo) => {
+                    setRouteInfo(routeInfo);
+                });
+            }
+
+            if (type === "ctb") {
+                getCTBData(route, dir).then((routeInfo) => {
+                    setRouteInfo(routeInfo);
+                });
+            }
         }, 55000);
 
         return () => {

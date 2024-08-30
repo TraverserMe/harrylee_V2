@@ -7,10 +7,10 @@ function BusSearchRow({ routeInfo }: { routeInfo: Route }) {
         <Link
             href={
                 routeInfo.co === "KMB"
-                    ? `/bus/kmb/${routeInfo.route}&${routeInfo.bound}&${routeInfo.service_type}`
+                    ? `/bus/route/kmb&${routeInfo.route}&${routeInfo.bound}&${routeInfo.service_type}`
                     : routeInfo.co === "MB"
-                    ? `/bus/mb/${routeInfo.co}/${routeInfo.route}`
-                    : `/bus/ctb/${routeInfo.co}/${routeInfo.route}`
+                    ? `/bus/route/mb&${routeInfo.route}&${routeInfo.bound}`
+                    : `/bus/route/ctb&${routeInfo.route}&${routeInfo.bound}`
             }
         >
             <div className="flex items-center flex-row text-center border-b-2">
