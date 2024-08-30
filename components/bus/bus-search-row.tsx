@@ -23,7 +23,7 @@ function BusSearchRow({ routeInfo }: { routeInfo: Route }) {
                         <span className="font-bold text-lg">
                             {routeInfo.dest_tc}
                             {routeInfo.co === "MB"
-                                ? " - 小巴"
+                                ? " - 小巴 (從" + routeInfo.orig_tc + ")"
                                 : routeInfo.co === "CTB"
                                 ? " - 城巴"
                                 : ""}

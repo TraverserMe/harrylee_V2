@@ -122,8 +122,9 @@ const getData = async () => {
         };
     }) as Route[];
 
-    const mbRes = miniBusRoute as Route[];
-    return [...kmbRoutes, ...ctbRoutes, ...revertCtbRoutes, ...mbRes];
+    // const mbRes = (await getMiniBusRoutes()) as Route[];
+
+    return [...kmbRoutes, ...ctbRoutes, ...revertCtbRoutes];
 };
 
 function BusSearchPage() {
