@@ -101,10 +101,10 @@ const getData = async () => {
             co: "CTB",
             route: route.route,
             route_id: route.route_id,
-            orig_tc: route.dest_tc,
-            orig_en: route.dest_en,
-            dest_tc: route.orig_tc,
-            dest_en: route.orig_en,
+            orig_tc: route.orig_tc,
+            orig_en: route.orig_en,
+            dest_tc: route.dest_tc,
+            dest_en: route.dest_en,
             bound: "I",
         } as Route;
     });
