@@ -29,6 +29,7 @@
         "@tanstack/react-table": "^8.20.1",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "csvtojson": "^2.0.10",
         "firebase": "^10.12.5",
         "firebase-admin": "^11.11.1",
         "framer-motion": "^11.3.17",

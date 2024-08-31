@@ -188,6 +188,9 @@ export default function Navbar() {
                                     <ListItem title="Bus" href="/bus">
                                         Check bus estimated time
                                     </ListItem>
+                                    <ListItem title="Bus" href="/bus/search">
+                                        Bus Search
+                                    </ListItem>
                                 </ul>
                             </NavigationMenuContent>
                         </NavigationMenuItem>
@@ -283,6 +286,13 @@ export default function Navbar() {
                                             className="underline"
                                         >
                                             Bus Estimated Time
+                                        </Link>
+                                        <br />
+                                        <Link
+                                            href={"/bus/search"}
+                                            className="underline"
+                                        >
+                                            Bus Search
                                         </Link>
                                     </AccordionContent>
                                 </AccordionItem>
