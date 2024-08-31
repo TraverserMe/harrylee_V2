@@ -23,7 +23,7 @@ function BusRow({
                 </span>
                 <span className="text-sm">{busStop}</span>
             </div>
-            <div className="flex flex-col mr-3">
+            <div className="flex flex-col mr-2 w-1/5 overflow-auto">
                 {moment(eta, "YYYY-MM-DD HH:mm:ss").diff(moment(), "minutes") >
                 0 ? (
                     <span>
