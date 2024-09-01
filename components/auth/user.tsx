@@ -30,7 +30,7 @@ export const CurrentUser = () => {
             <Button
                 variant="outline"
                 onClick={() => {
-                    router.push("/login");
+                    router.push("/login/callback=index");
                 }}
             >
                 Log in

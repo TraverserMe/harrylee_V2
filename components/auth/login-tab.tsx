@@ -16,7 +16,7 @@ import * as z from "zod";
 import { LoginSchema } from "@/schemas/login-schema";
 import { startTransition, useEffect, useState } from "react";
 import LoginProvider from "@/components/auth/loginProvider";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
@@ -37,6 +37,9 @@ function LoginTab() {
     const [success, setSuccess] = useState<string | undefined>("");
     const session = useSession();
     const router = useRouter();
+    const params = usePathname()?.split("/").pop();
+    const callback = params?.split("&")[0].split("=")[1];
+    const link = params?.split("&pathname=")[1];
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -82,7 +85,11 @@ function LoginTab() {
     };
 
     if (session.status === "authenticated") {
-        router.push("/");
+        if (callback === "busSearch") {
+            router.push(`/bus/route/${link}`);
+        } else {
+            router.push("/");
+        }
     }
 
     return (

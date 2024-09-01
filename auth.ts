@@ -32,7 +32,7 @@ declare module "next-auth" {
 // leekinnangharry3@gmail.com
 export const { auth, handlers, signIn, signOut } = NextAuth({
     pages: {
-        signIn: "/login",
+        signIn: "/login/callback=index",
     },
     providers: [Google({
         clientId: process.env.GOOGLE_CLIENT_ID,
@@ -85,7 +85,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                     )
                 );
 
-                console.log("UserCredential", UserCredential)
+                // console.log("UserCredential", UserCredential)
                 return true;
             }
             return true;

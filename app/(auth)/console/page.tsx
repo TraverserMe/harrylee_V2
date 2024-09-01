@@ -103,7 +103,7 @@ const ConsolePage = () => {
 
     if (session.status === "unauthenticated") {
         setTimeout(() => {
-            router.push("/login");
+            router.push("/login/callback=index");
         }, 3000);
         return <main>Please sign in</main>;
     }

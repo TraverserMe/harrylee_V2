@@ -19,6 +19,11 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { calculateDistance } from "@/utils/bus";
+import { signIn, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import LoadingWithText from "@/components/loading-with-text";
+import { MapComponent } from "@/components/map/map";
 
 async function getKMBData(route: string, dir: string, serviceType: string) {
     let busStopETA = [] as RouteETA[];
@@ -130,6 +135,8 @@ function getClosestStop(
 }
 
 function BusRoutePage() {
+    const router = useRouter();
+    const user = useSession();
     const [userLocation, setUserLocation] = useState({
         lat: 22.302711,
         long: 114.177216,
@@ -146,6 +153,7 @@ function BusRoutePage() {
     const interval = useRef<NodeJS.Timeout | null>(null);
     const [openedStop, setOpenedStop] = useState(0);
     const [routeInfo, setRouteInfo] = useState<RouteETA[]>();
+    const stopInfo = routeInfo ? routeInfo.map((stop) => stop.stopInfo) : [];
 
     function _onGetCurrentLocation() {
         const options = {
@@ -247,8 +255,40 @@ function BusRoutePage() {
 
     return (
         <>
-            <div className="min-h-[230px] border-2">
-                {/* To do: Google Map here */} Work IN PROGRESS
+            <div className="h-[230px] border-2">
+                {user.status === "loading" && (
+                    <LoadingWithText text="loading..." />
+                )}
+                {user.status === "unauthenticated" && (
+                    <div className="flex flex-col items-center justify-center space-y-4 h-full">
+                        <h2>You need to login to use this feature</h2>
+                        <Button
+                            onClick={() => signIn("google")}
+                            className="w-40"
+                        >
+                            Login with google
+                        </Button>
+
+                        <Button
+                            onClick={() =>
+                                router.push(
+                                    "/login/callback=busSearch&pathname=" +
+                                        pathname
+                                )
+                            }
+                            className="w-40"
+                        >
+                            Login with email
+                        </Button>
+                    </div>
+                )}
+                {user.status === "authenticated" && (
+                    <MapComponent
+                        setOpenedStop={setOpenedStop}
+                        openedStop={openedStop}
+                        stopInfo={stopInfo}
+                    />
+                )}
             </div>
             <ScrollArea className="h-[calc(100vh-400px)] max-h-[500px]">
                 {routeInfo &&
