@@ -2,6 +2,7 @@ import { FirestoreAdapter } from "@auth/firebase-adapter"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials";
 import NextAuth, { type DefaultSession } from "next-auth"
+import authConfig from "@/auth.config";
 import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from "firebase/auth";
 import { auth as GoogleAuth } from "@/firebase/config";
 import { cert } from "firebase-admin/app";
@@ -32,39 +33,8 @@ declare module "next-auth" {
 // leekinnangharry3@gmail.com
 export const { auth, handlers, signIn, signOut } = NextAuth({
     pages: {
-        signIn: "/login/callback=index",
+        signIn: "/login",
     },
-    providers: [Google({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        allowDangerousEmailAccountLinking: true,
-        // authorization: {
-        //     params: {
-        //         prompt: "consent",
-        //         access_type: "offline",
-        //         response_type: "code"
-        //     }
-        // }
-    }),
-    Credentials({
-        name: "credentials",
-        credentials: {
-            email: {},
-            password: {},
-        },
-        async authorize(credentials): Promise<any> {
-            if (!credentials) return null
-            const { email, password } = credentials as { email: string, password: string };
-            const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
-            // console.log("userCredential.user", userCredential.user)
-            if (userCredential) {
-                return userCredential.user
-            } else {
-                return null;
-            }
-        }
-    })
-    ],
     adapter: FirestoreAdapter(
         {
             credential: cert({
@@ -76,18 +46,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     ),
     callbacks: {
         async signIn({ account }) {
-            if (account?.provider === 'google') {
-                const UserCredential = await signInWithCredential(
-                    GoogleAuth,
-                    GoogleAuthProvider.credential(
-                        account.id_token,
-                        account.access_token
-                    )
-                );
 
-                // console.log("UserCredential", UserCredential)
-                return true;
-            }
             return true;
         },
         async session({ token, session, user }) {
@@ -138,5 +97,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         },
     },
     session: { strategy: "jwt" },
-
+    ...authConfig,
 })

@@ -66,7 +66,7 @@ function SignInTab() {
             setSuccess("Check your email account for verification");
             form.reset();
             setTimeout(() => {
-                router.push("/login/callback=index");
+                router.push("/login");
             }, 3000);
         } catch (error) {
             if (

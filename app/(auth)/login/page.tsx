@@ -1,8 +1,9 @@
+import { auth } from "@/auth";
 import LoginTab from "@/components/auth/login-tab";
 import SignInTab from "@/components/auth/signup-tab";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-export default function LoginPage() {
+export default async function LoginPage() {
     return (
         <Tabs
             defaultValue="Login"

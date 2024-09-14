@@ -29,17 +29,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { login } from "@/action/sign-in";
-import { useSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 function LoginTab() {
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
-    const session = useSession();
-    const router = useRouter();
-    const params = usePathname()?.split("/").pop();
-    const callback = params?.split("&")[0].split("=")[1];
-    const link = params?.split("&pathname=")[1];
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -83,14 +76,6 @@ function LoginTab() {
             // setError("Maybe you have use other provider?");
         }
     };
-
-    if (session.status === "authenticated") {
-        if (callback === "busSearch") {
-            router.push(`/bus/route/${link}`);
-        } else {
-            router.push("/");
-        }
-    }
 
     return (
         <TabsContent value="Login">

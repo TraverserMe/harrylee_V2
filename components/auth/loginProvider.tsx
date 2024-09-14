@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 // import { FirebaseError } from "firebase/app";
 // import { useState } from "react";
 // import LoadingWithText from "@/components/loading-with-text";
-import { loginWithGoogle } from "@/action/sign-in";
 
 function LoginProvider() {
     return (
