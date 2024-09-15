@@ -24,7 +24,11 @@ export const getUserById = async (id: string) => {
 };
 
 export const getUserByEmail = async (email: string) => {
-    return await adminAuth.getUserByEmail(email);
+    const user = await adminAuth.getUserByEmail(email);
+
+    if (!user) return null
+
+    return user
 };
 
 export const setCustomClaims = async (uid: string, claims: UserRole, adminId: string) => {

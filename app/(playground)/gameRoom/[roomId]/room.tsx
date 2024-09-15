@@ -44,7 +44,7 @@ function Room({ roomId }: RoomProps) {
     useEffect(() => {
         if (!user) return;
         enterRoom(user.id, roomId, {
-            name: user.name || user.email,
+            name: user.name ?? user.email ?? "Unknown",
             image: user.image || "",
             id: user.id,
             status: "waiting",

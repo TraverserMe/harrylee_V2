@@ -14,9 +14,7 @@ function LoginProvider() {
         <div className="w-full flex flex-col gap-2">
             <Button
                 onClick={() => {
-                    signIn("google", {
-                        // redirectTo: "/",
-                    });
+                    signIn("google");
                 }}
             >
                 <FcGoogle className="h-5 w-5" />

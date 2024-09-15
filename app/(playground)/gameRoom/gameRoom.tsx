@@ -26,7 +26,7 @@ export default function GameRoom() {
     const handleJoinRoom = async () => {
         if (!user) return;
         await enterRoom(user.id, roomId, {
-            name: user.name || user.email,
+            name: user.name ?? user.email ?? "Unknown",
             image: user.image || "",
             id: user.id,
             status: "waiting",

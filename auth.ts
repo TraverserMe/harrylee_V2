@@ -16,7 +16,6 @@ declare module "next-auth" {
     interface Session {
         user: {
             role: UserRole
-            email: string
             id: string
             name?: string
             image?: string
@@ -31,21 +30,12 @@ declare module "next-auth" {
 }
 
 // leekinnangharry3@gmail.com
-export const { auth, handlers, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
     pages: {
         signIn: "/login",
     },
-    adapter: FirestoreAdapter(
-        {
-            credential: cert({
-                projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
-                clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY,
-            }),
-        }
-    ),
     callbacks: {
-        async signIn({ account }) {
+        async signIn({ user, account }) {
 
             return true;
         },
@@ -75,27 +65,55 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
             return session;
         },
-        async jwt({ token }) {
-            if (!token.email) return token;
-
-            const existingUser = await getUserByEmail(token.email);
-
-            if (!existingUser) {
-                // console.log("existingUser", existingUser)
-                return token
+        async jwt({ account, token, user }) {
+            if (user) {
+                token.role = user.role
+                token.name = user.name
+                token.picture = user.image
             }
 
-            if (!existingUser.customClaims) return token;
+            // const existingUser = await getUserByEmail(token.email);
+            token.role = {
+                isUser: true,
+                isAdmin: false,
+            }
+            return token
+            // console.log("@@existingUser", existingUser)
+
+            // if (!existingUser) {
+            // }
+
+            // token.id = existingUser.uid
+            // token.role = existingUser.customClaims as UserRole
+            // token.name = existingUser.displayName
+            // token.picture = existingUser.photoURL
+
+            // console.log("token", token)
+            // return token
+
+            // console.log("existingUser", existingUser)
+
+            // if (!existingUser) {
+            //     // console.log("existingUser", existingUser)
+            //     return token
+            // }
+
+            // if (!existingUser.customClaims) return token;
 
 
-            token.id = existingUser.uid
-            token.role = existingUser.customClaims as UserRole
-            token.name = existingUser.displayName
-            token.picture = existingUser.photoURL
 
-            return token;
+            // return token;
         },
     },
     session: { strategy: "jwt" },
+    adapter: FirestoreAdapter(
+        {
+            credential: cert({
+                projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
+                clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
+                privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY,
+            }),
+        }
+    ),
     ...authConfig,
 })
