@@ -1,5 +1,6 @@
 "use client";
 import TitleBar from "@/components/design/titleBar";
+import { getAllUsers } from "@/firebase/admin/admin";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -108,6 +109,15 @@ function WorkExperiencePage() {
                     </p>
                 </div>
             </section>
+            <div>
+                <button
+                    onClick={() => {
+                        getAllUsers();
+                    }}
+                >
+                    get all user from admin auth
+                </button>
+            </div>
         </>
     );
 }

@@ -72,37 +72,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.picture = user.image
             }
 
-            // const existingUser = await getUserByEmail(token.email);
-            token.role = {
-                isUser: true,
-                isAdmin: false,
+            const existingUser = await getUserByEmail(token.email);
+
+            if (!existingUser) {
+                return token
             }
-            return token
-            // console.log("@@existingUser", existingUser)
 
-            // if (!existingUser) {
-            // }
+            token.id = existingUser.uid
+            token.role = existingUser.customClaims as UserRole
+            token.name = existingUser.displayName
+            token.picture = existingUser.photoURL
 
-            // token.id = existingUser.uid
-            // token.role = existingUser.customClaims as UserRole
-            // token.name = existingUser.displayName
-            // token.picture = existingUser.photoURL
-
-            // console.log("token", token)
-            // return token
-
-            // console.log("existingUser", existingUser)
-
-            // if (!existingUser) {
-            //     // console.log("existingUser", existingUser)
-            //     return token
-            // }
-
-            // if (!existingUser.customClaims) return token;
-
-
-
-            // return token;
+            return token;
         },
     },
     session: { strategy: "jwt" },
