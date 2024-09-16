@@ -18,16 +18,6 @@ const retrieveUser = async (uid: string) => {
     }
 };
 
-const getAllUsers = async () => {
-    const querySnapshot = await adminAuth.listUsers();
-    const res = [] as string[];
-
-    console.log(querySnapshot.users);
-    querySnapshot.users.forEach((user) => {
-        res.push(user.uid);
-    });
-    return res;
-};
 
 const firstTimeClaim = async (uid: string) => {
     const user = await adminAuth.getUser(uid);
@@ -59,4 +49,4 @@ const setCustomUserClaims = async (uid: string, UserRole: UserRole) => {
     return NextResponse.json({ message: "success" }, { status: 200 });
 };
 
-export { retrieveUser, firstTimeClaim, getAllUsers };
+export { retrieveUser, firstTimeClaim };
