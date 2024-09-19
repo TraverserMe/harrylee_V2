@@ -1,11 +1,6 @@
-import { FirestoreAdapter } from "@auth/firebase-adapter"
-import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials";
+
 import NextAuth, { type DefaultSession } from "next-auth"
 import authConfig from "@/auth.config";
-import { GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from "firebase/auth";
-import { auth as GoogleAuth } from "@/firebase/config";
-import { cert } from "firebase-admin/app";
 import { UserRole } from "@/schemas/user-schema";
 import { getUserByEmail } from "@/action/firestore";
 
@@ -14,19 +9,17 @@ declare module "next-auth" {
      * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
      */
     interface Session {
-        user: {
-            role: UserRole
-            id: string
-            name?: string
-            image?: string
-            /**
-             * By default, TypeScript merges new interface properties and overwrites existing ones.
-             * In this case, the default session user properties will be overwritten,
-             * with the new ones defined above. To keep the default session user properties,
-             * you need to add them back into the newly declared interface.
-             */
-        } & DefaultSession["user"]
+        user: ExtendedUser
     }
+
+    type ExtendedUser = DefaultSession["user"] & {
+        email: string
+        role: UserRole
+        id: string
+        name?: string
+        image?: string
+    }
+
 }
 
 // leekinnangharry3@gmail.com
@@ -36,6 +29,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     callbacks: {
         async signIn({ user, account }) {
+            if (account?.provider !== "google") {
+                //find user verified email yet
+                if (!user.email) {
+                    return false
+                }
+                const existingUser = await getUserByEmail(user.email);
+
+                if (!existingUser) {
+                    return false
+                }
+
+                if (!existingUser.emailVerified) {
+                    return false
+                }
+
+            }
 
             return true;
         },
@@ -87,14 +96,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
     },
     session: { strategy: "jwt" },
-    adapter: FirestoreAdapter(
-        {
-            credential: cert({
-                projectId: process.env.AUTH_FIREBASE_PROJECT_ID,
-                clientEmail: process.env.AUTH_FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.AUTH_FIREBASE_PRIVATE_KEY,
-            }),
-        }
-    ),
     ...authConfig,
 })

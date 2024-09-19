@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { auth as GoogleAuth } from "@/firebase/config";
 import { LoginSchema } from "@/schemas/login-schema";
+import { getUserByEmail } from "./action/firestore";
 
 export default {
     providers: [
@@ -21,16 +22,35 @@ export default {
             // }
         }),
         Credentials({
+            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+            // e.g. domain, username, password, 2FA token, etc.
+            credentials: {
+                email: {},
+                password: {},
+            },
             async authorize(credentials) {
                 const validatedFields = LoginSchema.safeParse(credentials);
                 if (validatedFields.success) {
                     const { email, password } = validatedFields.data;
-                    const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
-                    // console.log("userCredential.user", userCredential.user)
-                    if (userCredential) {
-                        return userCredential.user as any
-                    }
+                    try {
+                        // const existingUser = await getUserByEmail(email);
 
+                        // if (!existingUser) {
+                        //     return false
+                        // }
+
+                        const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
+                        // console.log("userCredential.user", userCredential.user)
+                        return userCredential.user as any
+
+                    } catch (error: any) {
+                        console.log("@@@error.code", error.code)
+                        if (error.code == "auth/user-not-found") {
+                            return false
+                        }
+                        console.log("error", error)
+                        return false
+                    }
                     return null;
                 }
             }

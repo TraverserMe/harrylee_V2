@@ -3,14 +3,7 @@
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { FirebaseError } from "@firebase/util";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { TabsContent } from "@/components/ui/tabs";
 
@@ -18,20 +11,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchema } from "@/schemas/signup-schema";
 import { useState } from "react";
-import {
-    Form,
-    FormControl,
-    FormLabel,
-    FormItem,
-    FormField,
-    FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormLabel, FormItem, FormField, FormMessage } from "@/components/ui/form";
 import { createUser } from "@/firebase/user";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import LoginProvider from "@/components/auth/loginProvider";
 import { useRouter } from "next/navigation";
 import LoadingWithText from "@/components/loading-with-text";
+import { signIn } from "@/auth";
 
 function SignInTab() {
     const [error, setError] = useState<string | undefined>("");
@@ -53,29 +40,23 @@ function SignInTab() {
     const preventCopyPaste = (e: any) => {
         e.preventDefault();
     };
-
+    // leekinnangharry@gmail.com
     const onSubmit = async (values: z.infer<typeof SignUpSchema>) => {
         setError("");
         setSuccess("");
         try {
-            await createUser({
-                email: values.email,
-                password: values.password,
-            });
-
+            const res = await createUser(values);
+            console.log("res", res);
             setSuccess("Check your email account for verification");
             form.reset();
             setTimeout(() => {
-                router.push("/login");
+                router.refresh();
             }, 3000);
         } catch (error) {
-            if (
-                error instanceof FirebaseError &&
-                error.code == "auth/email-already-in-use"
-            ) {
-                setError("Email already in use");
+            if (error instanceof FirebaseError && error.code == "auth/email-already-in-use") {
+                return setError("Email already in use");
             } else {
-                setError("An error occurred, please try again later");
+                return setError("Something went wrong");
             }
         }
     };
@@ -85,16 +66,11 @@ function SignInTab() {
             <Card>
                 <CardHeader>
                     <CardTitle>Signup</CardTitle>
-                    <CardDescription>
-                        Create your account with your email and password.
-                    </CardDescription>
+                    <CardDescription>Create your account with your email and password.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
                     <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-2"
-                        >
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -148,9 +124,7 @@ function SignInTab() {
                                                 type="password"
                                                 onKeyDown={(e) => {
                                                     if (e.key === "Enter") {
-                                                        form.handleSubmit(
-                                                            onSubmit
-                                                        )();
+                                                        form.handleSubmit(onSubmit)();
                                                     }
                                                 }}
                                                 disabled={isLoading}
@@ -165,16 +139,8 @@ function SignInTab() {
                             <FormError message={error} />
                             <FormSuccess message={success} />
 
-                            <Button
-                                className="w-full"
-                                type="submit"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? (
-                                    <LoadingWithText text="Creating..." />
-                                ) : (
-                                    "Create Account"
-                                )}
+                            <Button className="w-full" type="submit" disabled={isLoading}>
+                                {isLoading ? <LoadingWithText text="Creating..." /> : "Create Account"}
                             </Button>
                         </form>
                     </Form>
