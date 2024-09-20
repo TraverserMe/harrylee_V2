@@ -1,34 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LoginSchema } from "@/schemas/login-schema";
-import { startTransition, useEffect, useState } from "react";
+import { useState } from "react";
 import LoginProvider from "@/components/auth/loginProvider";
-import { usePathname, useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import {
-    Form,
-    FormControl,
-    FormLabel,
-    FormItem,
-    FormField,
-    FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormLabel, FormItem, FormField, FormMessage } from "@/components/ui/form";
 import { login } from "@/action/sign-in";
+import { Input } from "@/components/ui/input";
 
 function LoginTab() {
     const [error, setError] = useState<string | undefined>("");
@@ -82,17 +66,11 @@ function LoginTab() {
             <Card>
                 <CardHeader>
                     <CardTitle>Login</CardTitle>
-                    <CardDescription>
-                        Enter your details to login and unlock more functions in
-                        this website.
-                    </CardDescription>
+                    <CardDescription>Enter your details to login and unlock more functions in this website.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
                     <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            className="space-y-2"
-                        >
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
                             <FormField
                                 control={form.control}
                                 name="email"

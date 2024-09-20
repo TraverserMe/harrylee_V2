@@ -3,6 +3,7 @@ import NextAuth, { type DefaultSession } from "next-auth"
 import authConfig from "@/auth.config";
 import { UserRole } from "@/schemas/user-schema";
 import { getUserByEmail } from "@/action/firestore";
+import { setCustomClaims } from "@/action/auth/setCutomClaims";
 
 declare module "next-auth" {
     /**
@@ -42,6 +43,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
                 if (!existingUser.emailVerified) {
                     return false
+                }
+
+                if (existingUser.emailVerified && !existingUser.customClaims?.isUser) {
+                    await setCustomClaims(existingUser.uid, { isUser: true, isAdmin: false })
                 }
 
             }

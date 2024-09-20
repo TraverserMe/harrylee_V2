@@ -33,12 +33,6 @@ export default {
                 if (validatedFields.success) {
                     const { email, password } = validatedFields.data;
                     try {
-                        // const existingUser = await getUserByEmail(email);
-
-                        // if (!existingUser) {
-                        //     return false
-                        // }
-
                         const userCredential = await signInWithEmailAndPassword(GoogleAuth, email, password);
                         // console.log("userCredential.user", userCredential.user)
                         return userCredential.user as any
@@ -51,7 +45,6 @@ export default {
                         console.log("error", error)
                         return false
                     }
-                    return null;
                 }
             }
         })

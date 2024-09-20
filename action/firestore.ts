@@ -25,8 +25,6 @@ export const getUserById = async (id: string) => {
 
 export const getUserByEmail = async (email: string) => {
     const user = await adminAuth.getUserByEmail(email);
-    console.log("user", user)
-
     if (!user) return null
 
     return user
