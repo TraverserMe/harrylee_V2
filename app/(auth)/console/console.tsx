@@ -68,33 +68,33 @@ const Console = () => {
         }
     };
 
-    useEffect(() => {
-        if (permitted) {
-            const unsubscribe = onSnapshot(collection(db, "users"), (data) => {
-                if (data) {
-                    //get the documents id from the query and the data from the query
+    // useEffect(() => {
+    //     if (permitted) {
+    //         const unsubscribe = onSnapshot(collection(db, "users"), (data) => {
+    //             if (data) {
+    //                 //get the documents id from the query and the data from the query
 
-                    let users = [] as UserSchema[];
-                    data.forEach((doc) => {
-                        if (doc.id.length > 20) {
-                            users.push({
-                                id: doc.id,
-                                ...doc.data(),
-                            } as UserSchema);
-                        }
-                    });
-                    setUsers(users);
-                } else {
-                    console.log("Document does not exist.");
-                }
-            });
+    //                 let users = [] as UserSchema[];
+    //                 data.forEach((doc) => {
+    //                     if (doc.id.length > 20) {
+    //                         users.push({
+    //                             id: doc.id,
+    //                             ...doc.data(),
+    //                         } as UserSchema);
+    //                     }
+    //                 });
+    //                 setUsers(users);
+    //             } else {
+    //                 console.log("Document does not exist.");
+    //             }
+    //         });
 
-            // Clean up the listener when the component unmounts
-            return () => {
-                unsubscribe();
-            };
-        }
-    }, [permitted]); // Empty dependency array means it runs once on mount
+    //         // Clean up the listener when the component unmounts
+    //         return () => {
+    //             unsubscribe();
+    //         };
+    //     }
+    // }, [permitted]); // Empty dependency array means it runs once on mount
 
     if (session.status === "loading") {
         return <main>Loading...</main>;
@@ -133,9 +133,7 @@ const Console = () => {
                                         defaultChecked={selectedUser.isAdmin}
                                         id="isAdmin"
                                         onCheckedChange={(e) => {
-                                            setUserIsAdmin(
-                                                e.valueOf() as boolean
-                                            );
+                                            setUserIsAdmin(e.valueOf() as boolean);
                                         }}
                                     />
                                     <br />
@@ -144,9 +142,7 @@ const Console = () => {
                                         defaultChecked={selectedUser.isUser}
                                         id="isUser"
                                         onCheckedChange={(e) => {
-                                            setUserIsUser(
-                                                e.valueOf() as boolean
-                                            );
+                                            setUserIsUser(e.valueOf() as boolean);
                                         }}
                                     />
                                     <br />
@@ -155,8 +151,7 @@ const Console = () => {
                                     disabled={
                                         saving ||
                                         !permitted ||
-                                        (selectedUser.isAdmin === userIsAdmin &&
-                                            selectedUser.isUser === userIsUser)
+                                        (selectedUser.isAdmin === userIsAdmin && selectedUser.isUser === userIsUser)
                                     }
                                     onClick={onSave}
                                 >
@@ -165,12 +160,7 @@ const Console = () => {
                             </CardContent>
                         )}
                     </Card>
-                    <DataTable
-                        columns={columns}
-                        data={users}
-                        selectedRow={selectedUser}
-                        setSelectedRow={setSelectedUser}
-                    />
+                    <DataTable columns={columns} data={users} selectedRow={selectedUser} setSelectedRow={setSelectedUser} />
                 </>
             )}
         </main>

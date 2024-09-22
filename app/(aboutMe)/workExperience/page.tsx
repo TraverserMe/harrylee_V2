@@ -10,23 +10,12 @@ function WorkExperiencePage() {
             <section id="#work_1" className="mt-4 p-2 flex flex-1 font-bold">
                 <div className="w-full">
                     <h1 className="text-sm md:text-xl">
-                        <Link
-                            href="https://shop.pegasus.hk/"
-                            className="underline hover:no-underline"
-                            target="_blank"
-                        >
-                            <Image
-                                src={"/image/pegasus.svg"}
-                                alt={"pegasus logo"}
-                                width={100}
-                                height={30}
-                            />
+                        <Link href="https://shop.pegasus.hk/" className="underline hover:no-underline" target="_blank">
+                            <Image src={"/image/pegasus.svg"} alt={"pegasus logo"} width={100} height={30} />
                             飛馬電腦 PEGASUS
                         </Link>
                     </h1>
-                    <h2 className="text-sm md:text-lg">
-                        Assemble Worker (Part-Time)
-                    </h2>
+                    <h2 className="text-sm md:text-lg">Assemble Worker (Part-Time)</h2>
                     <ul className="text-xs md:text-lg list-disc list-inside">
                         <li>Computer Assembly</li>
                         <li>Computer Repair</li>
@@ -35,9 +24,7 @@ function WorkExperiencePage() {
                     </ul>
                 </div>
                 <div className="text-sm md:text-lg text-right">
-                    <p className="min-w-[150px] md:min-w-[180px]">
-                        Sept 2020 - Now
-                    </p>
+                    <p className="min-w-[150px] md:min-w-[180px]">Sept 2020 - Now</p>
                 </div>
             </section>
             <hr />
@@ -49,18 +36,11 @@ function WorkExperiencePage() {
                             className="underline hover:no-underline"
                             target="_blank"
                         >
-                            <Image
-                                src={"/image/RoboCode.png"}
-                                alt={"RoboCode logo"}
-                                width={100}
-                                height={30}
-                            />
+                            <Image src={"/image/RoboCode.png"} alt={"RoboCode logo"} width={100} height={30} />
                             STEM Accelerator Limited
                         </Link>
                     </h1>
-                    <h2 className="text-sm md:text-lg">
-                        Instructor (Part-Time)
-                    </h2>
+                    <h2 className="text-sm md:text-lg">Instructor (Part-Time)</h2>
                     <ul className="text-xs md:text-lg list-disc list-inside">
                         <li>Material Making</li>
                         <li>
@@ -70,32 +50,19 @@ function WorkExperiencePage() {
                     </ul>
                 </div>
                 <div className="text-sm md:text-lg text-right">
-                    <p className="min-w-[150px] md:min-w-[180px]">
-                        Dec 2021 - Apr 2024
-                    </p>
+                    <p className="min-w-[150px] md:min-w-[180px]">Dec 2021 - Apr 2024</p>
                 </div>
             </section>
             <hr />
             <section id="#work_3" className="mt-4 p-2 flex flex-1 font-bold">
                 <div className="w-full">
                     <h1 className="text-sm md:text-xl">
-                        <Link
-                            href="https://shop.pegasus.hk/"
-                            className="underline hover:no-underline"
-                            target="_blank"
-                        >
-                            <Image
-                                src={"/image/pegasus.svg"}
-                                alt={"pegasus logo"}
-                                width={100}
-                                height={30}
-                            />
+                        <Link href="https://shop.pegasus.hk/" className="underline hover:no-underline" target="_blank">
+                            <Image src={"/image/pegasus.svg"} alt={"pegasus logo"} width={100} height={30} />
                             飛馬電腦 PEGASUS
                         </Link>
                     </h1>
-                    <h2 className="text-sm md:text-lg">
-                        Junior Website Developer (Part-Time)
-                    </h2>
+                    <h2 className="text-sm md:text-lg">Junior Website Developer (Part-Time)</h2>
                     <ul className="text-xs md:text-lg list-disc list-inside">
                         <li>Frontend Website Development</li>
                         <li>Website Maintenance</li>
@@ -103,9 +70,7 @@ function WorkExperiencePage() {
                     </ul>
                 </div>
                 <div className="text-sm md:text-lg text-right">
-                    <p className="min-w-[150px] md:min-w-[180px]">
-                        Jan 2024 - May 2024
-                    </p>
+                    <p className="min-w-[150px] md:min-w-[180px]">Jan 2024 - May 2024</p>
                 </div>
             </section>
         </>

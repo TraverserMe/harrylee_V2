@@ -43,7 +43,7 @@ export default auth((req) => {
         );
     }
 
-    return;
+    return
 });
 
 // Optionally, don't invoke Middleware on some paths

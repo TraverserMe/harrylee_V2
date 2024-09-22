@@ -8,7 +8,7 @@ export const publicRoutes: string[] = [
   "/projects",
   "/workExperience",
   "/bus",
-  "/bus/search"
+  "/bus/search",
 ];
 
 /***

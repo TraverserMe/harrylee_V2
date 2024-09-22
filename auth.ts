@@ -3,7 +3,7 @@ import NextAuth, { type DefaultSession } from "next-auth"
 import authConfig from "@/auth.config";
 import { UserRole } from "@/schemas/user-schema";
 import { getUserByEmail } from "@/action/firestore";
-import { setCustomClaims } from "@/action/auth/setCutomClaims";
+import { setCustomClaims } from "@/action/auth/setCustomClaims";
 
 declare module "next-auth" {
     /**
@@ -29,9 +29,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         signIn: "/login",
     },
     callbacks: {
-        async signIn({ user, account }) {
+        async signIn({ user, account, profile }) {
+            console.log("user", user)
+            console.log("account", account)
+            console.log("profile", profile)
             if (account?.provider !== "google") {
-                //find user verified email yet
+                console.log(1)
                 if (!user.email) {
                     return false
                 }
@@ -50,10 +53,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
 
             }
+            // if (account?.provider === "google") {
+            //     if (user.id) {
+            //         await setCustomClaims(user.id, { isUser: true, isAdmin: false })
+            //     }
+            // }
 
             return true;
         },
         async session({ token, session, user }) {
+
+            console.log("token", token)
+            console.log("session", session)
+            console.log("user", user)
             if (!token) {
                 session.user.id = user.id
             }
@@ -80,6 +92,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return session;
         },
         async jwt({ account, token, user }) {
+
+            console.log("account", account)
             if (user) {
                 token.role = user.role
                 token.name = user.name
